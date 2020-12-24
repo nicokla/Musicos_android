@@ -101,8 +101,8 @@ public class GameScreen implements Screen {
         stage.act();
 //        if(mainActivity.midiSequencer.isPlaying()) {
 //        if (mainActivity.midiSequencer.isPlaying){
-            accu = getCoordinateFromTime(
-                    mainActivity.midiSequencer.getTimeRel());
+        accu = getCoordinateFromTime(mainActivity.sequencer.getMicrosecondPosition()/1000);
+            //getCoordinateFromTime(mainActivity.midiSequencer.getTimeRel())
 //            accu++;
 //        }
     }

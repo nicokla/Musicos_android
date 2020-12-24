@@ -30,6 +30,10 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import java.util.Hashtable;
 
 import io.realm.Realm;
+import jp.kshoji.javax.sound.midi.InvalidMidiDataException;
+import jp.kshoji.javax.sound.midi.Receiver;
+import jp.kshoji.javax.sound.midi.ShortMessage;
+import jp.kshoji.javax.sound.midi.impl.SequencerImpl;
 import nicokla.com.musicos.MainAndCo.GlobalVars;
 import nicokla.com.musicos.MainAndCo.MainActivity;
 //import nicokla.com.musicos.PlayerFrag.LibgdxStuff.GameFragment;
@@ -49,8 +53,8 @@ public class PlayerFragment extends Fragment
          {
   MainActivity activity;
   public YouTubePlayerView youTubePlayerView;
-  public YouTubePlayer youTubePlayer;
-  int[] guidelinesHorizontalID=new int[4];
+//  public YouTubePlayer youTubePlayer;
+   int[] guidelinesHorizontalID=new int[4];
   int[] guidelinesVerticalID=new int[8];
   int[] guidelinesHorizontal_demiID=new int[3];
   ConstraintLayout myConstraintLayout;
@@ -92,10 +96,12 @@ public class PlayerFragment extends Fragment
 //    super.onDestroyView();
 //  }
 
-           @Override
+
+   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-    idToLine=new Hashtable<Integer, Integer>();
+
+     idToLine=new Hashtable<Integer, Integer>();
     idToColumn=new Hashtable<Integer, Integer>();
     idToDouze=new Hashtable<Integer, Integer>();
     idToIsDiese=new Hashtable<Integer, Integer>();
@@ -332,7 +338,9 @@ public class PlayerFragment extends Fragment
      switch(action){
        case MotionEvent.ACTION_DOWN:
 //         GlobalVars.getInstance().midiPlayer.jouerNote(tag, 80);
-         activity.midiSequencer.addNote(tag);
+//         activity.midiSequencer.addNote(tag);
+         GlobalVars.getInstance().midiPlayer.jouerNote(tag, 80);
+         activity.sendNoteOn(tag,80);
          libgdxFragment.pianoTiles.gameScreen.addTile(
                  idToColumn.get(id),
                  idToLine.get(id),
@@ -341,7 +349,9 @@ public class PlayerFragment extends Fragment
          break;
        case MotionEvent.ACTION_UP:
 //         GlobalVars.getInstance().midiPlayer.stopNote(tag);
-         activity.midiSequencer.addNoteOff(tag);
+//         activity.midiSequencer.addNoteOff(tag);
+         activity.sendNoteOff(tag);
+         GlobalVars.getInstance().midiPlayer.stopNote(tag);
          break;
      }
    }else{ // other button (not in matrix)

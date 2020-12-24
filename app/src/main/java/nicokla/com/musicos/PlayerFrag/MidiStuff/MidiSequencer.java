@@ -1,19 +1,32 @@
 package nicokla.com.musicos.PlayerFrag.MidiStuff;
 
-import com.leff.midi.MidiFile;
+//import com.leff.midi.MidiFile;
+//import com.leff.midi.MidiTrack;
+//import com.leff.midi.event.MidiEvent;
+//import com.leff.midi.event.NoteOff;
+//import com.leff.midi.event.NoteOn;
+//import com.leff.midi.util.MidiProcessor;
+
+import android.widget.SeekBar;
+
 import com.leff.midi.MidiTrack;
-import com.leff.midi.event.MidiEvent;
 import com.leff.midi.event.NoteOff;
 import com.leff.midi.event.NoteOn;
-import com.leff.midi.util.MidiProcessor;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import jp.kshoji.javax.sound.midi.Receiver;
+import jp.kshoji.javax.sound.midi.Sequence;
+import jp.kshoji.javax.sound.midi.impl.SequencerImpl;
 import nicokla.com.musicos.MainAndCo.GlobalVars;
 
 public class MidiSequencer {
+//  SequencerImpl sequencer;
+//  Sequence sequence;
+//  Receiver rcvr;
+//  public MidiPlayer midiPlayer;
 
   long debuts[] = new long[128];
   long timeNowRel = 0;

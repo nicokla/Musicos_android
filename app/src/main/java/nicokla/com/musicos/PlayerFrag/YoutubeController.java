@@ -62,12 +62,15 @@ public class YoutubeController extends AbstractYouTubePlayerListener {
       @Override
       public void onStopTrackingTouch(SeekBar seekBar) { }
       @Override
-      public void onStartTrackingTouch(SeekBar seekBar) { }
+      public void onStartTrackingTouch(SeekBar seekBar) {
+//        mainActivity.sequencer.stop();
+      }
       @Override
       public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
         if(fromUser) {
           youTubePlayer.seekTo((float) progress);
-          mainActivity.midiSequencer.setTime(((long) progress) * 1000);
+//          mainActivity.midiSequencer.setTime(((long) progress) * 1000);
+          mainActivity.sequencer.setMicrosecondPosition(((long) progress) * 1000000);
           //if()
 //          mainActivity.gameScreen.accu =
 //          accu - 130;
@@ -112,11 +115,13 @@ public class YoutubeController extends AbstractYouTubePlayerListener {
   @Override
   public void onStateChange(YouTubePlayer youTubePlayer, PlayerConstants.PlayerState state) {
     if(state == PlayerConstants.PlayerState.PLAYING){
-      mainActivity.midiSequencer.play();
+//      mainActivity.midiSequencer.play();
+      mainActivity.sequencer.startRecording();
 //        mainActivity.gameScreen.defile = true;
       playPauseButton.setImageResource(R.drawable.ic_pause_black_48dp);
     }else if (state == PlayerConstants.PlayerState.PAUSED){
-      mainActivity.midiSequencer.pause();
+      mainActivity.sequencer.stop();
+//      mainActivity.midiSequencer.pause();
 //        mainActivity.gameScreen.defile = false;
       playPauseButton.setImageResource(R.drawable.ic_play_arrow_black_48dp);
     }
