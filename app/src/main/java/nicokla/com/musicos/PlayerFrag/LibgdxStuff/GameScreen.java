@@ -116,7 +116,7 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         //viewport.update(700, 400, false);
-        camera.position.y = accu - 130;
+        camera.position.y = accu - 200; // 165
         camera.update();
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
