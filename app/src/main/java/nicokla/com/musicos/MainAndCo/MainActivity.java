@@ -1,28 +1,45 @@
 package nicokla.com.musicos.MainAndCo;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
-
 import android.os.Bundle;
+//import android.support.annotation.NonNull;
+//import android.support.design.widget.BottomNavigationView;
+//import android.support.v4.app.Fragment;
+//import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
+import android.view.Window;
 
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import io.realm.Realm;
 import jp.kshoji.javax.sound.midi.InvalidMidiDataException;
 import jp.kshoji.javax.sound.midi.Receiver;
 import jp.kshoji.javax.sound.midi.ShortMessage;
 import jp.kshoji.javax.sound.midi.impl.SequencerImpl;
+import nicokla.com.musicos.MySongsFrag.MySongsFragment;
 import nicokla.com.musicos.PlayerFrag.LibgdxStuff.GameScreen;
-import nicokla.com.musicos.PlayerFrag.MidiStuff.MidiSequencer;
 import nicokla.com.musicos.PlayerFrag.YoutubeController;
 import nicokla.com.musicos.R;
 import nicokla.com.musicos.Realm.Parent;
+//import nicokla.com.musicos.navigation.HomeFragment;
+import nicokla.com.musicos.navigation.SearchFragment;
+import nicokla.com.musicos.navigation.SettingsFragment;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+//replace
+// android.support.design.widget.BottomNavigationView
+//        with
+//        com.google.android.material.bottomnavigation.BottomNavigationView
 
 public class MainActivity extends AppCompatActivity {
-    int alloQuoi;
-//    public MidiSequencer midiSequencer;
+    //    public MidiSequencer midiSequencer;
     public GameScreen gameScreen;
     public YoutubeController youtubeController;
     public Parent parent;
@@ -54,28 +71,61 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         sequencer = new SequencerImpl(60, GlobalVars.getInstance().midiPlayer);
         rcvr = sequencer.sequencerThread.midiEventRecordingReceiver;
 
         Realm realm = Realm.getDefaultInstance();
         parent = realm.where(Parent.class).findFirst();
-        alloQuoi = GlobalVars.getInstance().couleurs[0];
 //        midiSequencer = new MidiSequencer();
 
-        NavigationUI.setupActionBarWithNavController(this,
-            Navigation.findNavController(this, R.id.nav_host_fragment));
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
 
-        //songRepository = SongRepository.getInstance();
-        //songRepository.getRealm();
+//        NavigationUI.setupActionBarWithNavController(this,
+//                Navigation.findNavController(this, R.id.nav_host_fragment));
 
+//        NavigationUI.setupWithNavController(bottomNav,
+//                Navigation.findNavController(this, R.id.nav_host_fragment));
+
+//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                new MySongsFragment()).commit(); // HomeFragment()
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        return
-            Navigation.findNavController(this,
-                R.id.nav_host_fragment).navigateUp();
-    }
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+    new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+            Fragment selectedFragment = null;
+
+            switch (menuItem.getItemId()) {
+                case R.id.nav_home:
+                    selectedFragment = new MySongsFragment(); // HomeFragment()
+                    break;
+                case R.id.nav_search:
+                    selectedFragment = new SearchFragment();
+                    break;
+                case R.id.nav_bookmarks:
+                    selectedFragment = new nicokla.com.musicos.navigation.BookmarksFragment();
+                    break;
+                case R.id.nav_settings:
+                    selectedFragment = new SettingsFragment();
+                    break;
+            }
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    selectedFragment).commit();
+
+            return true;
+        }
+    };
+
+//    @Override
+//    public boolean onSupportNavigateUp() {
+//        return
+//                Navigation.findNavController(this,
+//                        R.id.nav_host_fragment).navigateUp();
+//    }
 
     @Override
     public void onResume() {
@@ -88,5 +138,4 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         GlobalVars.getInstance().midiPlayer.pause();
     }
-
 }

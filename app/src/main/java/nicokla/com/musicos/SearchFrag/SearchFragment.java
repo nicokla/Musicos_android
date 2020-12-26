@@ -71,7 +71,7 @@ public class SearchFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     // Inflate the layout for this fragment
-    View view = inflater.inflate(R.layout.fragment_search, container, false);
+    View view = inflater.inflate(R.layout.fragment_search_ytb, container, false);
 
     realm = Realm.getDefaultInstance();
 

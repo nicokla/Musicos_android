@@ -25,7 +25,7 @@
         android:id="@+id/searchFragment"
         android:name="nicokla.com.musicos.SearchFrag.SearchFragment"
         android:label="Search"
-        tools:layout="@layout/fragment_search">
+        tools:layout="@layout/fragment_search_ytb">
         <action
             android:id="@+id/confirmVideo"
             app:destination="@id/playerFragment"
