@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_home"
+        android:id="@+id/mySongsFragment"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="Home"/>
     <item
-        android:id="@+id/nav_search"
+        android:id="@+id/searchFragment"
         android:icon="@drawable/ic_search_black_24dp"
         android:title="Search"/>
     <item
-        android:id="@+id/nav_bookmarks"
+        android:id="@+id/bookmarksFragment"
         android:icon="@android:drawable/ic_menu_add"
-        android:title="Bookmarks" />
+        android:title="Add song" />
     <item
-        android:id="@+id/nav_settings"
+        android:id="@+id/settingsFragment"
         android:icon="@drawable/ic_settings_black_24dp"
         android:title="Settings"/>
 </menu>

@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_my_songs">
         <action
             android:id="@+id/newSong"
-            app:destination="@id/searchFragment"
+            app:destination="@id/searchFragmentYtb"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -22,7 +22,7 @@
             app:destination="@id/playerFragment" />
     </fragment>
     <fragment
-        android:id="@+id/searchFragment"
+        android:id="@+id/searchFragmentYtb"
         android:name="nicokla.com.musicos.SearchFrag.SearchFragment"
         android:label="Search"
         tools:layout="@layout/fragment_search_ytb">
@@ -45,4 +45,16 @@
             android:name="videoId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="nicokla.com.musicos.navigation.SearchFragment"
+        android:label="SearchFragment" />
+    <fragment
+        android:id="@+id/bookmarksFragment"
+        android:name="nicokla.com.musicos.navigation.BookmarksFragment"
+        android:label="BookmarksFragment" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="nicokla.com.musicos.navigation.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>

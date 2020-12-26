@@ -33,6 +33,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import static androidx.navigation.ui.NavigationUI.onNavDestinationSelected;
+
 //replace
 // android.support.design.widget.BottomNavigationView
 //        with
@@ -80,45 +82,50 @@ public class MainActivity extends AppCompatActivity {
 //        midiSequencer = new MidiSequencer();
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
-        bottomNav.setOnNavigationItemSelectedListener(navListener);
+        bottomNav.setOnNavigationItemSelectedListener(navListener(this));
 
 //        NavigationUI.setupActionBarWithNavController(this,
 //                Navigation.findNavController(this, R.id.nav_host_fragment));
 
-//        NavigationUI.setupWithNavController(bottomNav,
-//                Navigation.findNavController(this, R.id.nav_host_fragment));
+        NavigationUI.setupWithNavController(bottomNav,
+                Navigation.findNavController(this, R.id.nav_host_fragment));
 
 //        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
 //                new MySongsFragment()).commit(); // HomeFragment()
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
-    new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-            Fragment selectedFragment = null;
+    public BottomNavigationView.OnNavigationItemSelectedListener navListener(AppCompatActivity acti) {
+        return new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                onNavDestinationSelected(menuItem, Navigation.findNavController(acti, R.id.nav_host_fragment));
 
-            switch (menuItem.getItemId()) {
-                case R.id.nav_home:
-                    selectedFragment = new MySongsFragment(); // HomeFragment()
-                    break;
-                case R.id.nav_search:
-                    selectedFragment = new SearchFragment();
-                    break;
-                case R.id.nav_bookmarks:
-                    selectedFragment = new nicokla.com.musicos.navigation.BookmarksFragment();
-                    break;
-                case R.id.nav_settings:
-                    selectedFragment = new SettingsFragment();
-                    break;
-            }
+                /*
+                Fragment selectedFragment = null;
+
+                switch (menuItem.getItemId()) {
+                    case R.id.mySongsFragment:
+                        selectedFragment = new MySongsFragment(); // HomeFragment()
+                        break;
+                    case R.id.searchFragment:
+                        selectedFragment = new SearchFragment();
+                        break;
+                    case R.id.bookmarksFragment:
+                        selectedFragment = new nicokla.com.musicos.navigation.BookmarksFragment();
+                        break;
+                    case R.id.settingsFragment:
+                        selectedFragment = new SettingsFragment();
+                        break;
+                }
 
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     selectedFragment).commit();
+*/
+                return true;
+            }
+        };
+    }
 
-            return true;
-        }
-    };
 
 //    @Override
 //    public boolean onSupportNavigateUp() {
