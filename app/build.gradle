@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'realm-android'
 
@@ -122,6 +123,15 @@ dependencies {
 
 //    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
+    implementation platform('com.google.firebase:firebase-bom:26.1.1')
+    implementation 'com.google.firebase:firebase-auth'
+//    https://firebase.google.com/docs/auth/android/start
+    implementation 'com.google.firebase:firebase-firestore'
+//    https://firebase.google.com/docs/firestore/quickstart#java
+    implementation 'com.google.firebase:firebase-storage'
+//    https://firebase.google.com/docs/storage/android/start
+
 }
 
 task copyAndroidNatives() {
