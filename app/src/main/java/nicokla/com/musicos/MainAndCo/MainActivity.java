@@ -6,6 +6,7 @@ import android.os.Bundle;
 //import android.support.v4.app.Fragment;
 //import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,8 @@ import nicokla.com.musicos.navigation.SettingsFragment;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     public Parent parent;
     public SequencerImpl sequencer;
     public Receiver rcvr;
+    private NavController navController;
 
 
     public void sendNoteOn(int data1, int data2){
@@ -84,11 +88,22 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener(this));
 
-//        NavigationUI.setupActionBarWithNavController(this,
-//                Navigation.findNavController(this, R.id.nav_host_fragment));
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
-        NavigationUI.setupWithNavController(bottomNav,
-                Navigation.findNavController(this, R.id.nav_host_fragment));
+        NavigationUI.setupActionBarWithNavController(this, navController);
+        NavigationUI.setupWithNavController(bottomNav, navController);
+
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller,
+                                             @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                if(destination.getId() == R.id.playerFragment) {
+                    hideBottomNav();
+                } else {
+                    showBottomNav();
+                }
+            }
+        });
 
 //        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
 //                new MySongsFragment()).commit(); // HomeFragment()
@@ -127,12 +142,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    @Override
-//    public boolean onSupportNavigateUp() {
-//        return
-//                Navigation.findNavController(this,
-//                        R.id.nav_host_fragment).navigateUp();
-//    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        return Navigation.findNavController(this, R.id.nav_host_fragment).navigateUp();
+    }
 
     @Override
     public void onResume() {
@@ -144,5 +157,17 @@ public class MainActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
         GlobalVars.getInstance().midiPlayer.pause();
+    }
+
+    private void showBottomNav()
+    {
+        BottomNavigationView navBar = this.findViewById(R.id.bottom_navigation);
+        navBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideBottomNav()
+    {
+        BottomNavigationView navBar = this.findViewById(R.id.bottom_navigation);
+        navBar.setVisibility(View.GONE);
     }
 }
