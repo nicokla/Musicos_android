@@ -1,33 +1,56 @@
 package nicokla.com.musicos.MainAndCo;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
-
 import android.os.Bundle;
+//import android.support.annotation.NonNull;
+//import android.support.design.widget.BottomNavigationView;
+//import android.support.v4.app.Fragment;
+//import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
 
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import io.realm.Realm;
 import jp.kshoji.javax.sound.midi.InvalidMidiDataException;
 import jp.kshoji.javax.sound.midi.Receiver;
 import jp.kshoji.javax.sound.midi.ShortMessage;
 import jp.kshoji.javax.sound.midi.impl.SequencerImpl;
+import nicokla.com.musicos.MySongsFrag.MySongsFragment;
 import nicokla.com.musicos.PlayerFrag.LibgdxStuff.GameScreen;
-import nicokla.com.musicos.PlayerFrag.MidiStuff.MidiSequencer;
 import nicokla.com.musicos.PlayerFrag.YoutubeController;
 import nicokla.com.musicos.R;
 import nicokla.com.musicos.Realm.Parent;
+//import nicokla.com.musicos.navigation.HomeFragment;
+import nicokla.com.musicos.navigation.SearchFragment;
+import nicokla.com.musicos.navigation.SettingsFragment;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import static androidx.navigation.ui.NavigationUI.onNavDestinationSelected;
+
+//replace
+// android.support.design.widget.BottomNavigationView
+//        with
+//        com.google.android.material.bottomnavigation.BottomNavigationView
 
 public class MainActivity extends AppCompatActivity {
-    int alloQuoi;
-//    public MidiSequencer midiSequencer;
+    //    public MidiSequencer midiSequencer;
     public GameScreen gameScreen;
     public YoutubeController youtubeController;
     public Parent parent;
     public SequencerImpl sequencer;
     public Receiver rcvr;
+    private NavController navController;
 
 
     public void sendNoteOn(int data1, int data2){
@@ -54,27 +77,74 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         sequencer = new SequencerImpl(60, GlobalVars.getInstance().midiPlayer);
         rcvr = sequencer.sequencerThread.midiEventRecordingReceiver;
 
         Realm realm = Realm.getDefaultInstance();
         parent = realm.where(Parent.class).findFirst();
-        alloQuoi = GlobalVars.getInstance().couleurs[0];
 //        midiSequencer = new MidiSequencer();
 
-        NavigationUI.setupActionBarWithNavController(this,
-            Navigation.findNavController(this, R.id.nav_host_fragment));
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnNavigationItemSelectedListener(navListener(this));
 
-        //songRepository = SongRepository.getInstance();
-        //songRepository.getRealm();
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
+        NavigationUI.setupActionBarWithNavController(this, navController);
+        NavigationUI.setupWithNavController(bottomNav, navController);
+
+        navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller,
+                                             @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                if(destination.getId() == R.id.playerFragment) {
+                    hideBottomNav();
+                } else {
+                    showBottomNav();
+                }
+            }
+        });
+
+//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                new MySongsFragment()).commit(); // HomeFragment()
     }
+
+    public BottomNavigationView.OnNavigationItemSelectedListener navListener(AppCompatActivity acti) {
+        return new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                onNavDestinationSelected(menuItem, Navigation.findNavController(acti, R.id.nav_host_fragment));
+
+                /*
+                Fragment selectedFragment = null;
+
+                switch (menuItem.getItemId()) {
+                    case R.id.mySongsFragment:
+                        selectedFragment = new MySongsFragment(); // HomeFragment()
+                        break;
+                    case R.id.searchFragment:
+                        selectedFragment = new SearchFragment();
+                        break;
+                    case R.id.bookmarksFragment:
+                        selectedFragment = new nicokla.com.musicos.navigation.BookmarksFragment();
+                        break;
+                    case R.id.settingsFragment:
+                        selectedFragment = new SettingsFragment();
+                        break;
+                }
+
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    selectedFragment).commit();
+*/
+                return true;
+            }
+        };
+    }
+
 
     @Override
     public boolean onSupportNavigateUp() {
-        return
-            Navigation.findNavController(this,
-                R.id.nav_host_fragment).navigateUp();
+        return Navigation.findNavController(this, R.id.nav_host_fragment).navigateUp();
     }
 
     @Override
@@ -89,4 +159,15 @@ public class MainActivity extends AppCompatActivity {
         GlobalVars.getInstance().midiPlayer.pause();
     }
 
+    private void showBottomNav()
+    {
+        BottomNavigationView navBar = this.findViewById(R.id.bottom_navigation);
+        navBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideBottomNav()
+    {
+        BottomNavigationView navBar = this.findViewById(R.id.bottom_navigation);
+        navBar.setVisibility(View.GONE);
+    }
 }

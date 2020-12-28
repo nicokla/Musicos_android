@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'realm-android'
 
@@ -111,6 +112,26 @@ dependencies {
     implementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 
     implementation 'com.github.mcxtzhang:SwipeDelMenuLayout:V1.3.0'
+
+//    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    //    com.google.android.material:material-rc01
+
+//    https://maven.google.com/web/index.html?q=constraint#androidx.constraintlayout:constraintlayout:2.0.4
+    implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
+//    implementation "com.google.android.material.tabs.TabLayout"
+
+//    implementation 'com.android.support.constraint:constraint-layout:2.0.4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
+    implementation platform('com.google.firebase:firebase-bom:26.1.1')
+    implementation 'com.google.firebase:firebase-auth'
+//    https://firebase.google.com/docs/auth/android/start
+    implementation 'com.google.firebase:firebase-firestore'
+//    https://firebase.google.com/docs/firestore/quickstart#java
+    implementation 'com.google.firebase:firebase-storage'
+//    https://firebase.google.com/docs/storage/android/start
+
 }
 
 task copyAndroidNatives() {

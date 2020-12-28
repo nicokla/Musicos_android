@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "845227245926",
+    "firebase_url": "https://essaifirebase-ea4fa.firebaseio.com",
+    "project_id": "essaifirebase-ea4fa",
+    "storage_bucket": "essaifirebase-ea4fa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:845227245926:android:1ab3ce075330677ea3c8a7",
+        "android_client_info": {
+          "package_name": "nicokla.com.musicos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "845227245926-3lj0cguab5k4iggqbr7iistjtjnstskm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXiwSpHsn2j8juHSXZ3-L3c0flTqiXNls"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "845227245926-3lj0cguab5k4iggqbr7iistjtjnstskm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "845227245926-19ak0vk933grcno3f3u9ne0brlboi2uq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nicokla.DatabaseExample"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
