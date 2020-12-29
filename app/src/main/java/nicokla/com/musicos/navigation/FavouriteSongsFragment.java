@@ -13,11 +13,11 @@ import androidx.fragment.app.Fragment;
 import nicokla.com.musicos.R;
 
 
-public class SearchSongsFragment extends Fragment {
+public class FavouriteSongsFragment extends Fragment {
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.search_songs_layout, container, false);
-    }
+  @Nullable
+  @Override
+  public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.favourite_songs_layout, container, false);
+  }
 }

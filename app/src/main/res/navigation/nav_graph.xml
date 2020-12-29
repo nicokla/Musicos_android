@@ -3,24 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/MySongsFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/MySongsFragment"
         android:name="nicokla.com.musicos.MySongsFrag.MySongsFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_my_songs">
-        <action
-            android:id="@+id/newSong"
-            app:destination="@id/searchYtbFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-        <action
-            android:id="@+id/seeVideo"
-            app:destination="@id/playerFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_my_songs"/>
     <fragment
         android:id="@+id/searchYtbFragment"
         android:name="nicokla.com.musicos.SearchYtbFrag.SearchYtbFragment"
@@ -51,10 +40,29 @@
         android:label="Search" />
     <fragment
         android:id="@+id/addSongFragment"
-        android:name="nicokla.com.musicos.navigation.BookmarksFragment"
+        android:name="nicokla.com.musicos.navigation.AddSongFragment"
         android:label="Add song" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="nicokla.com.musicos.navigation.SettingsFragment"
         android:label="Settings" />
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="nicokla.com.musicos.navigation.HomeFragment"
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/seeVideo"
+            app:destination="@id/playerFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/newSong"
+            app:destination="@id/searchYtbFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 </navigation>
