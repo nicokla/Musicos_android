@@ -16,7 +16,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import io.realm.Realm;
 import io.realm.RealmList;
-import nicokla.com.musicos.MySongsFrag.MySongsFragmentDirections;
+import nicokla.com.musicos.navigation.HomeFragmentDirections;
 import nicokla.com.musicos.Realm.DataHelper;
 import nicokla.com.musicos.Realm.Parent;
 import nicokla.com.musicos.R;
@@ -49,7 +49,7 @@ public class MySongsFragment extends Fragment {
       @Override
       public void onClick(View v) {
         Navigation.findNavController(view).navigate(
-                MySongsFragmentDirections.newSong()
+                HomeFragmentDirections.newSong()
         );
       }
     });

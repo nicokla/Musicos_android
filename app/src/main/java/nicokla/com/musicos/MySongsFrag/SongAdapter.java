@@ -16,7 +16,7 @@ import com.squareup.picasso.Picasso;
 
 import io.realm.OrderedRealmCollection;
 import io.realm.RealmRecyclerViewAdapter;
-import nicokla.com.musicos.MySongsFrag.MySongsFragmentDirections;
+import nicokla.com.musicos.navigation.HomeFragmentDirections;
 import nicokla.com.musicos.R;
 import nicokla.com.musicos.Realm.Song;
 
@@ -51,8 +51,8 @@ class SongAdapter extends RealmRecyclerViewAdapter<Song, SongAdapter.SongHolder>
       //onClick method called when the view is clicked
       @Override
       public void onClick(View view) {
-        MySongsFragmentDirections.SeeVideo action =
-                MySongsFragmentDirections.seeVideo(song.getVideoId());
+        HomeFragmentDirections.SeeVideo action =
+                HomeFragmentDirections.seeVideo(song.getVideoId());
         Navigation.findNavController(view).navigate(action);
       }
     });

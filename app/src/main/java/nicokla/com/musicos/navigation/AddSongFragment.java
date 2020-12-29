@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import nicokla.com.musicos.R;
 
-public class BookmarksFragment extends Fragment {
+public class AddSongFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
