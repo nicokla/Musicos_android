@@ -1,4 +1,4 @@
-package nicokla.com.musicos.SearchFrag;
+package nicokla.com.musicos.SearchYtbFrag;
 
 
 import android.app.ProgressDialog;
@@ -28,7 +28,7 @@ import nicokla.com.musicos.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SearchFragment extends Fragment {
+public class SearchYtbFragment extends Fragment {
 
   private Realm realm;
 
@@ -55,7 +55,7 @@ public class SearchFragment extends Fragment {
   //int the array list has id, title, description and thumbnail url
   private List<VideoItem> searchResults;
 
-  public SearchFragment() {
+  public SearchYtbFragment() {
     // Required empty public constructor
   }
 

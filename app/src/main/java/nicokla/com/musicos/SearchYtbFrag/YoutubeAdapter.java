@@ -1,4 +1,4 @@
-package nicokla.com.musicos.SearchFrag;
+package nicokla.com.musicos.SearchYtbFrag;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,7 +17,6 @@ import java.util.List;
 
 import io.realm.Realm;
 import nicokla.com.musicos.Realm.DataHelper;
-import nicokla.com.musicos.SearchFrag.SearchFragmentDirections;
 import nicokla.com.musicos.R;
 
 /**
@@ -121,8 +120,8 @@ public class YoutubeAdapter extends RecyclerView.Adapter<YoutubeAdapter.MyViewHo
                         60,
                         singleVideo.getDescription()
                 );
-                SearchFragmentDirections.ConfirmVideo action =
-                        SearchFragmentDirections.confirmVideo(singleVideo.getId());
+                SearchYtbFragmentDirections.ConfirmVideo action =
+                        SearchYtbFragmentDirections.confirmVideo(singleVideo.getId());
                 Navigation.findNavController(view).navigate(action);
 
             }

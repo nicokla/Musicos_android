@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/HomeFragment">
+    app:startDestination="@id/MySongsFragment">
 
     <fragment
-        android:id="@+id/HomeFragment"
+        android:id="@+id/MySongsFragment"
         android:name="nicokla.com.musicos.MySongsFrag.MySongsFragment"
         android:label="Home"
         tools:layout="@layout/fragment_my_songs">
         <action
             android:id="@+id/newSong"
-            app:destination="@id/searchFragmentYtb"
+            app:destination="@id/searchYtbFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -22,8 +22,8 @@
             app:destination="@id/playerFragment" />
     </fragment>
     <fragment
-        android:id="@+id/searchFragmentYtb"
-        android:name="nicokla.com.musicos.SearchFrag.SearchFragment"
+        android:id="@+id/searchYtbFragment"
+        android:name="nicokla.com.musicos.SearchYtbFrag.SearchYtbFragment"
         android:label="Search"
         tools:layout="@layout/fragment_search_ytb">
         <action
@@ -33,7 +33,7 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/HomeFragment"
+            app:popUpTo="@+id/MySongsFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
