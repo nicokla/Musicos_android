@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'realm-android'
 
@@ -63,12 +63,14 @@ dependencies {
     //excluding org.apache.httpcomponents so as to resolve anonymity
     implementation('com.google.api-client:google-api-client-android:1.23.0') {
         exclude group: 'org.apache.httpcomponents'
+        exclude group: 'com.google.guava'
     }
 
     //youtube data api v3 dependency
     //excluding org.apache.httpcomponents so as to resolve anonymity
     implementation('com.google.apis:google-api-services-youtube:v3-rev192-1.23.0') {
         exclude group: 'org.apache.httpcomponents'
+        exclude group: 'com.google.guava'
     }
 
     implementation 'com.squareup.picasso:picasso:2.71828'
@@ -125,12 +127,14 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
 ////    implementation 'com.google.guava:guava:27.0.1-android'
-//    implementation platform('com.google.firebase:firebase-bom:26.2.0')
-//    implementation 'com.google.firebase:firebase-auth'
+    implementation platform('com.google.firebase:firebase-bom:26.2.0')
+    implementation 'com.google.firebase:firebase-auth'
 ////    https://firebase.google.com/docs/auth/android/start
-//    implementation 'com.google.firebase:firebase-firestore'
+//    implementation platform('com.google.firebase:firebase-bom:26.2.0')
+    implementation 'com.google.firebase:firebase-firestore'
 ////    https://firebase.google.com/docs/firestore/quickstart#java
-//    implementation 'com.google.firebase:firebase-storage'
+//    implementation platform('com.google.firebase:firebase-bom:26.2.0')
+    implementation 'com.google.firebase:firebase-storage'
 ////    https://firebase.google.com/docs/storage/android/start
 ////    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
 }
