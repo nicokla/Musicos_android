@@ -46,9 +46,9 @@ public class SearchFragment extends Fragment {
     // Add Fragments to Tabs
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getChildFragmentManager());
-        adapter.addFragment(new nicokla.com.musicos.navigation.Frag1(), "Songs");
-        adapter.addFragment(new nicokla.com.musicos.navigation.Frag2(), "Users");
-        adapter.addFragment(new nicokla.com.musicos.navigation.Frag3(), "Featured");
+        adapter.addFragment(new SearchSongsFragment(), "Songs");
+        adapter.addFragment(new SearchUsersFragment(), "Users");
+//        adapter.addFragment(new nicokla.com.musicos.navigation.Frag3(), "Featured");
         viewPager.setAdapter(adapter);
     }
 

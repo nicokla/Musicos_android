@@ -7,7 +7,6 @@ import android.os.Bundle;
 //import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,24 +18,20 @@ import jp.kshoji.javax.sound.midi.InvalidMidiDataException;
 import jp.kshoji.javax.sound.midi.Receiver;
 import jp.kshoji.javax.sound.midi.ShortMessage;
 import jp.kshoji.javax.sound.midi.impl.SequencerImpl;
-import nicokla.com.musicos.MySongsFrag.MySongsFragment;
 import nicokla.com.musicos.PlayerFrag.LibgdxStuff.GameScreen;
 import nicokla.com.musicos.PlayerFrag.YoutubeController;
 import nicokla.com.musicos.R;
 import nicokla.com.musicos.Realm.Parent;
 //import nicokla.com.musicos.navigation.HomeFragment;
-import nicokla.com.musicos.navigation.SearchFragment;
-import nicokla.com.musicos.navigation.SettingsFragment;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import static androidx.navigation.ui.NavigationUI.onNavDestinationSelected;
+import androidx.navigation.ui.AppBarConfiguration;
 
 //replace
 // android.support.design.widget.BottomNavigationView
@@ -90,7 +85,11 @@ public class MainActivity extends AppCompatActivity {
 
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
-        NavigationUI.setupActionBarWithNavController(this, navController);
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.HomeFragment, R.id.searchFragment, R.id.addSongFragment, R.id.settingsFragment)
+                .build();
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+//        NavigationUI.setupActionBarWithNavController(this, navController);
         NavigationUI.setupWithNavController(bottomNav, navController);
 
         navController.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
@@ -112,33 +111,37 @@ public class MainActivity extends AppCompatActivity {
     public BottomNavigationView.OnNavigationItemSelectedListener navListener(AppCompatActivity acti) {
         return new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                onNavDestinationSelected(menuItem, Navigation.findNavController(acti, R.id.nav_host_fragment));
-
-                /*
-                Fragment selectedFragment = null;
-
-                switch (menuItem.getItemId()) {
-                    case R.id.mySongsFragment:
-                        selectedFragment = new MySongsFragment(); // HomeFragment()
-                        break;
-                    case R.id.searchFragment:
-                        selectedFragment = new SearchFragment();
-                        break;
-                    case R.id.bookmarksFragment:
-                        selectedFragment = new nicokla.com.musicos.navigation.BookmarksFragment();
-                        break;
-                    case R.id.settingsFragment:
-                        selectedFragment = new SettingsFragment();
-                        break;
-                }
-
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    selectedFragment).commit();
-*/
-                return true;
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                onNavDestinationSelected(item, Navigation.findNavController(acti, R.id.nav_host_fragment));
+                return false;
             }
         };
+//            @Override
+//            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+//                /*
+//                Fragment selectedFragment = null;
+//
+//                switch (menuItem.getItemId()) {
+//                    case R.id.mySongsFragment:
+//                        selectedFragment = new MySongsFragment(); // HomeFragment()
+//                        break;
+//                    case R.id.searchFragment:
+//                        selectedFragment = new SearchFragment();
+//                        break;
+//                    case R.id.bookmarksFragment:
+//                        selectedFragment = new nicokla.com.musicos.navigation.BookmarksFragment();
+//                        break;
+//                    case R.id.settingsFragment:
+//                        selectedFragment = new SettingsFragment();
+//                        break;
+//                }
+//
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                    selectedFragment).commit();
+//*/
+//                return true;
+//            }
+//        };
     }
 
 

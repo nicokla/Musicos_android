@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/mySongsFragment"
+        android:id="@+id/HomeFragment"
         android:icon="@drawable/ic_home_black_24dp"
         android:title="Home"/>
     <item
@@ -9,7 +9,7 @@
         android:icon="@drawable/ic_search_black_24dp"
         android:title="Search"/>
     <item
-        android:id="@+id/bookmarksFragment"
+        android:id="@+id/addSongFragment"
         android:icon="@android:drawable/ic_menu_add"
         android:title="Add song" />
     <item
