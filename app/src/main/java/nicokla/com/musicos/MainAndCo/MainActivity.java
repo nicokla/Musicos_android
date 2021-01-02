@@ -86,7 +86,9 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.homeFragment, R.id.searchFragment, R.id.addSongFragment, R.id.settingsFragment)
+                R.id.homeFragment, R.id.searchFragment,
+                R.id.addSongFragment, R.id.settingsFragment,
+                R.id.signInFrag, R.id.signUpFrag)
                 .build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 //        NavigationUI.setupActionBarWithNavController(this, navController);
@@ -96,7 +98,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDestinationChanged(@NonNull NavController controller,
                                              @NonNull NavDestination destination, @Nullable Bundle arguments) {
-                if(destination.getId() == R.id.playerFragment) {
+                if(destination.getId() == R.id.playerFragment ||
+                        destination.getId() == R.id.signUpFrag ||
+                         destination.getId() == R.id.signInFrag) {
                     hideBottomNav();
                 } else {
                     showBottomNav();
