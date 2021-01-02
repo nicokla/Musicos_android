@@ -11,10 +11,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -46,12 +48,15 @@ public class SignUpFrag extends Fragment {
     SignUpButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Register();
+        Register(view);
       }
     });
     SignInTv.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
+        Navigation.findNavController(view).navigate(
+                SignUpFragDirections.actionSignUpFragToSignInFrag()
+        );
 //        Intent intent=new Intent(SignUpActivity.this, MainActivity.class);
 //        startActivity(intent);
 //        finish();
@@ -62,7 +67,7 @@ public class SignUpFrag extends Fragment {
   }
 
 
-  private void Register(){
+  private void Register(View view){
     String email=emailEt.getText().toString();
     String password1=passwordEt1.getText().toString();
     String password2=passwordEt2.getText().toString();
@@ -97,15 +102,18 @@ public class SignUpFrag extends Fragment {
       @Override
       public void onComplete(@NonNull Task<AuthResult> task) {
         if(task.isSuccessful()){
-          Log.d("a", "onComplete: ");
+          Log.d("cool:", task.getResult().getUser().toString());
 //          Toast.makeText(SignUpActivity.this,"Successfully registered",Toast.LENGTH_LONG).show();
 //          Intent intent=new Intent(SignUpActivity.this,DashboardActivity.class);
 //          startActivity(intent);
 //          finish();
+          Navigation.findNavController(view).navigate(
+                  SignUpFragDirections.actionSignUpFragToHomeFragment()
+          );
         }
         else{
-          Log.d("b", "onComplete: ");
-//          Toast.makeText(SignUpActivity.this,"Sign up fail!",Toast.LENGTH_LONG).show();
+          Log.d("oups:", task.getException().getMessage());
+          Toast.makeText(getActivity(),"Sign up fail!",Toast.LENGTH_LONG).show();
         }
         progressDialog.dismiss();
       }

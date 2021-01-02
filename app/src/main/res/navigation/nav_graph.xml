@@ -6,11 +6,6 @@
     app:startDestination="@id/signInFrag">
 
     <fragment
-        android:id="@+id/MySongsFragment"
-        android:name="nicokla.com.musicos.MySongsFrag.MySongsFragment"
-        android:label="Home"
-        tools:layout="@layout/fragment_my_songs"/>
-    <fragment
         android:id="@+id/searchYtbFragment"
         android:name="nicokla.com.musicos.SearchYtbFrag.SearchYtbFragment"
         android:label="Search"
@@ -72,10 +67,18 @@
         tools:layout="@layout/fragment_sign_in" >
         <action
             android:id="@+id/action_signInFrag_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_signInFrag_to_signUpFrag"
-            app:destination="@id/signUpFrag" />
+            app:destination="@id/signUpFrag"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/signUpFrag"
@@ -84,9 +87,22 @@
         tools:layout="@layout/fragment_sign_up" >
         <action
             android:id="@+id/action_signUpFrag_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <action
             android:id="@+id/action_signUpFrag_to_signInFrag"
-            app:destination="@id/signInFrag" />
+            app:destination="@id/signInFrag"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
+    <fragment
+        android:id="@+id/mySongsFragment"
+        android:name="nicokla.com.musicos.MySongsFrag.MySongsFragment"
+        android:label="fragment_my_songs"
+        tools:layout="@layout/fragment_my_songs" />
 </navigation>

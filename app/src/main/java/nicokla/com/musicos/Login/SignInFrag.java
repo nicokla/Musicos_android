@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,6 +33,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import io.realm.Realm;
 import nicokla.com.musicos.MainAndCo.MainActivity;
 import nicokla.com.musicos.R;
+import nicokla.com.musicos.navigation.HomeFragmentDirections;
 
 public class SignInFrag extends Fragment {
 
@@ -56,7 +58,7 @@ public class SignInFrag extends Fragment {
     SignInButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        Login();
+        Login(view);
       }
     });
     SignUpTv.setOnClickListener(new View.OnClickListener() {
@@ -65,6 +67,9 @@ public class SignInFrag extends Fragment {
 //        Intent intent=new Intent(MainActivity.this, nicokla.com.essai2.SignUpActivity.class);
 //        startActivity(intent);
 //        finish();
+        Navigation.findNavController(view).navigate(
+                SignInFragDirections.actionSignInFragToSignUpFrag()
+        );
       }
     });
 
@@ -72,7 +77,7 @@ public class SignInFrag extends Fragment {
   }
 
 
-  private void Login(){
+  private void Login(View view){
     String email=emailEt.getText().toString();
     String password=passwordEt.getText().toString();
     if(TextUtils.isEmpty(email)){
@@ -86,19 +91,23 @@ public class SignInFrag extends Fragment {
     progressDialog.setMessage("Please wait...");
     progressDialog.show();
     progressDialog.setCanceledOnTouchOutside(false);
-    firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+    firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(getActivity(),
+      new OnCompleteListener<AuthResult>() {
       @Override
       public void onComplete(@NonNull Task<AuthResult> task) {
         if(task.isSuccessful()){
-          Log.d("a", "onComplete: ");
+          Log.d("cool:", task.getResult().getUser().toString());
 //          Toast.makeText(MainActivity.this,"Login Successfully",Toast.LENGTH_LONG).show();
 //          Intent intent=new Intent(MainActivity.this, nicokla.com.essai2.DashboardActivity.class);
 //          startActivity(intent);
 //          finish();
+          Navigation.findNavController(view).navigate(
+                  SignInFragDirections.actionSignInFragToHomeFragment()
+          );
         }
         else{
-          Log.d("b", "onComplete: ");
-//          Toast.makeText(MainActivity.this,"Sign In fail!",Toast.LENGTH_LONG).show();
+          Log.d("oups:", task.getException().getMessage());
+          Toast.makeText(getActivity(),"Sign in fail!",Toast.LENGTH_LONG).show();
         }
         progressDialog.dismiss();
       }
