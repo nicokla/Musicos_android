@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +35,8 @@ import jp.kshoji.javax.sound.midi.InvalidMidiDataException;
 import jp.kshoji.javax.sound.midi.Receiver;
 import jp.kshoji.javax.sound.midi.ShortMessage;
 import jp.kshoji.javax.sound.midi.impl.SequencerImpl;
+import nicokla.com.musicos.Firebase.SongFirestore;
+import nicokla.com.musicos.Firebase.SongStorage;
 import nicokla.com.musicos.MainAndCo.GlobalVars;
 import nicokla.com.musicos.MainAndCo.MainActivity;
 //import nicokla.com.musicos.PlayerFrag.LibgdxStuff.GameFragment;
@@ -49,7 +52,7 @@ import com.badlogic.gdx.backends.android.AndroidxFragmentApplication;
  */
 public class PlayerFragment extends Fragment
         implements  AndroidxFragmentApplication.Callbacks,
-        View.OnTouchListener
+        View.OnTouchListener, SongStorage.MyCallback
          {
   MainActivity activity;
   public YouTubePlayerView youTubePlayerView;
@@ -68,6 +71,9 @@ public class PlayerFragment extends Fragment
   Hashtable<Integer, Integer> idToColumn;
   Hashtable<Integer, Integer> idToIsDiese;
   Hashtable<Integer, Integer>  idToTrenteSix;
+
+  SongStorage songStorage;
+  SongFirestore songFirestore;
 
   int screenWidth ;
   int screenHeight ;
@@ -116,6 +122,10 @@ public class PlayerFragment extends Fragment
     // Inflate the layout for this fragment
     myView =  inflater.inflate(R.layout.fragment_player, container, false);
     vidId = PlayerFragmentArgs.fromBundle(getArguments()).getVideoId();
+    String songId = PlayerFragmentArgs.fromBundle(getArguments()).getSongId();
+
+    SongStorage.get(songId, this);
+
     youTubePlayerView = myView.findViewById(R.id.youtube_player_view);
 //    playPauseButton = view.findViewById(R.id.playPause);
 //    seekBar = view.findViewById(R.id.video_time);
@@ -391,6 +401,16 @@ public class PlayerFragment extends Fragment
    return false;
  }
 
+ @Override
+ public void onCallback(SongStorage songStorage) {
+    int i;
+    for (i=0; i < songStorage.scale.length; i++){
+      if (songStorage.scale[i]){
+        Log.d("scale :", String.valueOf(i));
+      }
+    }
+   this.songStorage = songStorage;
+ }
 }
 
 

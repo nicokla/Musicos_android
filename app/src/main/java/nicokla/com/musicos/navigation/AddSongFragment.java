@@ -11,13 +11,37 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import nicokla.com.musicos.R;
+import nicokla.com.musicos.databinding.FragmentAddSongBinding;
+import nicokla.com.musicos.databinding.FragmentMySongsBinding;
 
 public class AddSongFragment extends Fragment {
+    private FragmentAddSongBinding mBinding;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_bookmarks, container, false);
+        mBinding = FragmentAddSongBinding.inflate(getLayoutInflater());
+
+//        return inflater.inflate(R.layout.fragment_add_song, container, false);
+        mBinding.addSongWithVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(mBinding.getRoot()).navigate( // (view).navigate
+                        AddSongFragmentDirections.newSong()
+                );
+            }
+        });
+        mBinding.addSongWithoutVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Navigation.findNavController(mBinding.getRoot()).navigate( // (view).navigate
+                        AddSongFragmentDirections.newSongWithoutVideo()
+                );
+            }
+        });
+        return mBinding.getRoot();
     }
 }

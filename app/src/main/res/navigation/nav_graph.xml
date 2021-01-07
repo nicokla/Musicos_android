@@ -17,8 +17,8 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/MySongsFragment"
-            app:popUpToInclusive="true" />
+            app:popUpTo="@id/addSongFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/playerFragment"
@@ -28,6 +28,9 @@
         <argument
             android:name="videoId"
             app:argType="string" />
+        <argument
+            android:name="songId"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -36,7 +39,22 @@
     <fragment
         android:id="@+id/addSongFragment"
         android:name="nicokla.com.musicos.navigation.AddSongFragment"
-        android:label="Add song" />
+        android:label="Add song" >
+        <action
+            android:id="@+id/newSong"
+            app:destination="@id/searchYtbFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/newSongWithoutVideo"
+            app:destination="@id/addSongWithoutVideoFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="nicokla.com.musicos.navigation.SettingsFragment"
@@ -44,17 +62,10 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="nicokla.com.musicos.navigation.HomeFragment"
-        android:label="HomeFragment" >
+        android:label="Home">
         <action
             android:id="@+id/seeVideo"
             app:destination="@id/playerFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
-        <action
-            android:id="@+id/newSong"
-            app:destination="@id/searchYtbFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -63,8 +74,8 @@
     <fragment
         android:id="@+id/signInFrag"
         android:name="nicokla.com.musicos.Login.SignInFrag"
-        android:label="fragment_sign_in"
-        tools:layout="@layout/fragment_sign_in" >
+        android:label="Sign In"
+        tools:layout="@layout/fragment_sign_in">
         <action
             android:id="@+id/action_signInFrag_to_homeFragment"
             app:destination="@id/homeFragment"
@@ -83,8 +94,8 @@
     <fragment
         android:id="@+id/signUpFrag"
         android:name="nicokla.com.musicos.Login.SignUpFrag"
-        android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" >
+        android:label="Sign Up"
+        tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/action_signUpFrag_to_homeFragment"
             app:destination="@id/homeFragment"
@@ -103,6 +114,20 @@
     <fragment
         android:id="@+id/mySongsFragment"
         android:name="nicokla.com.musicos.MySongsFrag.MySongsFragment"
-        android:label="fragment_my_songs"
+        android:label="My Songs"
         tools:layout="@layout/fragment_my_songs" />
+    <fragment
+        android:id="@+id/addSongWithoutVideoFragment"
+        android:name="nicokla.com.musicos.navigation.AddSongWithoutVideoFragment"
+        android:label="AddSongWithoutVideoFragment" >
+        <action
+            android:id="@+id/confirmWithoutVideo"
+            app:destination="@id/playerFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/addSongFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
 </navigation>

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.UUID;
 
 import io.realm.Realm;
 import nicokla.com.musicos.Realm.DataHelper;
@@ -81,7 +82,7 @@ public class YoutubeAdapter extends RecyclerView.Adapter<YoutubeAdapter.MyViewHo
         final VideoItem singleVideo = mVideoList.get(position);
 
         //replace the default text with id, title and description with setText method
-        holder.video_id.setText("Video ID : "+singleVideo.getId()+" ");
+        holder.video_id.setText("Video ID : " + singleVideo.getId() + " ");
         holder.video_title.setText(singleVideo.getTitle());
         holder.video_description.setText(singleVideo.getDescription());
 
@@ -121,7 +122,12 @@ public class YoutubeAdapter extends RecyclerView.Adapter<YoutubeAdapter.MyViewHo
                         singleVideo.getDescription()
                 );
                 SearchYtbFragmentDirections.ConfirmVideo action =
-                        SearchYtbFragmentDirections.confirmVideo(singleVideo.getId());
+                        SearchYtbFragmentDirections.confirmVideo(singleVideo.getId(), UUID.randomUUID().toString());
+
+                // CRUD : Create
+
+                // TODO : Create song with video in firebase.
+
                 Navigation.findNavController(view).navigate(action);
 
             }

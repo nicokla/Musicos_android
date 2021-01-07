@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -20,13 +21,17 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import nicokla.com.musicos.Firebase.SongFirestore;
+import nicokla.com.musicos.Firebase.SongStorage;
 import nicokla.com.musicos.R;
 import nicokla.com.musicos.Realm.Song;
 import nicokla.com.musicos.databinding.SwipableCellBinding;
 import nicokla.com.musicos.databinding.VideoItemBinding;
+import nicokla.com.musicos.navigation.HomeFragmentDirections;
 
 public class SongAdapter extends FirestoreAdapter<SongAdapter.ViewHolder> {
   static public OnSwipeListener mSwipeListener;
@@ -56,6 +61,7 @@ public class SongAdapter extends FirestoreAdapter<SongAdapter.ViewHolder> {
   @Override
   public void onBindViewHolder(ViewHolder holder, int position) {
     holder.bind(getSnapshot(position), mListener);
+//    SongFirestore songFirestore = getSnapshot(position).toObject(SongFirestore.class);
   }
 
   static class ViewHolder extends RecyclerView.ViewHolder {
@@ -105,7 +111,16 @@ public class SongAdapter extends FirestoreAdapter<SongAdapter.ViewHolder> {
       video_title.setText(song.getTitle());
 
       // Click listener
-      itemView.setOnClickListener(new View.OnClickListener() {
+//      video_view.setOnClickListener(new View.OnClickListener() {
+//        @Override
+//        public void onClick(View view) {
+//          HomeFragmentDirections.SeeVideo action =
+//                  HomeFragmentDirections.seeVideo(song.videoID);
+//          Navigation.findNavController(view).navigate(action);
+//        }
+//      });
+
+      video_view.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
           if (listener != null) {
@@ -118,22 +133,9 @@ public class SongAdapter extends FirestoreAdapter<SongAdapter.ViewHolder> {
         @Override
         public void onClick(View view) {
           if (mSwipeListener != null) {
-            FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-            mFirestore.collection("songs")
-                    .document(song.objectID)
-                    .delete();
-//                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                      @Override
-//                      public void onSuccess(Void aVoid) {
-//                        Log.d("hop", "DocumentSnapshot successfully deleted!");
-//                      }
-//                    })
-//                    .addOnFailureListener(new OnFailureListener() {
-//                      @Override
-//                      public void onFailure(@NonNull Exception e) {
-//                        Log.w("houp", "Error deleting document", e);
-//                      }
-//                    });
+            SongFirestore.delete(song.objectID);
+            SongStorage.delete(song.objectID);
+
             mSwipeListener.onDelete(getAdapterPosition());
           }
         }
