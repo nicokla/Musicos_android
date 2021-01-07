@@ -14,6 +14,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
 
+import nicokla.com.musicos.Firebase.SongFirestore;
 import nicokla.com.musicos.R;
 import nicokla.com.musicos.Realm.Song;
 import nicokla.com.musicos.databinding.SwipableCellBinding;
@@ -61,7 +62,7 @@ public class SongAdapter extends FirestoreAdapter<SongAdapter.ViewHolder> {
     public void bind(final DocumentSnapshot snapshot,
                      final OnSongSelectedListener listener) {
 
-      Song song = snapshot.toObject(Song.class);
+      SongFirestore song = snapshot.toObject(SongFirestore.class);
       Resources resources = itemView.getResources();
 
       // Load image
@@ -70,13 +71,15 @@ public class SongAdapter extends FirestoreAdapter<SongAdapter.ViewHolder> {
 //              .resize(480,270)
 //              .centerCrop()
 //              .into(binding.videoThumbnail);
-      Picasso.get()//mContext
-              .load(song.getImageUrl())
-              .resize(480,270)
-              .centerCrop()
-              .into(binding.videoThumbnail);
-      binding.videoDescription.setText(song.getDescription());
-      binding.videoId.setText(song.getVideoId());
+      if(song.imageUrl != ""){
+        Picasso.get()//mContext
+                .load(song.getImageUrl())
+                .resize(480,270)
+                .centerCrop()
+                .into(binding.videoThumbnail);
+      }
+      binding.videoDescription.setText("super la description.");
+      binding.videoId.setText(song.videoID);
       binding.videoTitle.setText(song.getTitle());
 
       // Click listener

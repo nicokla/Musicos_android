@@ -3,21 +3,28 @@ package nicokla.com.musicos.MySongsFrag;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -36,10 +43,7 @@ import nicokla.com.musicos.Realm.Song;
  */
 //
 public class MySongsFragment extends Fragment implements SongAdapter.OnSongSelectedListener {
-//  private RecyclerView recyclerView;
   private SongAdapter mAdapter;
-  private RecyclerView.LayoutManager layoutManager;
-//  private Realm realm;
   private FragmentMySongsBinding mBinding;
   private FirebaseFirestore mFirestore;
   private Query mQuery;
@@ -48,17 +52,11 @@ public class MySongsFragment extends Fragment implements SongAdapter.OnSongSelec
     // Required empty public constructor
   }
 
-
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-    // Inflate the layout for this fragment
-//    View view = inflater.inflate(R.layout.fragment_my_songs, container, false);
-//    realm = Realm.getDefaultInstance();
     mBinding = FragmentMySongsBinding.inflate(getLayoutInflater());
-//    setContentView(mBinding.getRoot());
 
-//    FloatingActionButton floating = view.findViewById(R.id.floatingActionButton);
     mBinding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
@@ -68,25 +66,24 @@ public class MySongsFragment extends Fragment implements SongAdapter.OnSongSelec
       }
     });
 
-//    recyclerView = view.findViewById(R.id.myRecyclerView);
-    mBinding.myRecyclerView.setHasFixedSize(true);
-    layoutManager = new LinearLayoutManager(this.getActivity());
-    mBinding.myRecyclerView.setLayoutManager(layoutManager);
-//    RealmList<Song> myList =
-//            realm.where(Parent.class).findFirst().getItemList();
-//    mAdapter = new SongAdapterOld(myList);
-    // Enable Firestore logging
     FirebaseFirestore.setLoggingEnabled(true);
-
-    // Firestore
     mFirestore = FirebaseFirestore.getInstance();
-
-    // Get ${LIMIT} restaurants
     mQuery = mFirestore.collection("songs")
             .whereEqualTo("ownerID", GlobalVars.getInstance().me.getUid());
-//            .document(GlobalVars.getInstance().me.getUid())
-//            .orderBy("avgRating", Query.Direction.DESCENDING);
-//            .limit(10);
+
+//    mQuery.get()
+//    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//      @Override
+//      public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//        if (task.isSuccessful()) {
+//          for (QueryDocumentSnapshot document : task.getResult()) {
+//            Log.d("henlo", document.getId() + " => " + document.getData());
+//          }
+//        } else {
+//          Log.d("frems", "Error getting documents: ", task.getException());
+//        }
+//      }
+//    });
 
     // RecyclerView
     mAdapter = new SongAdapter(mQuery, this) {
@@ -105,33 +102,43 @@ public class MySongsFragment extends Fragment implements SongAdapter.OnSongSelec
       @Override
       protected void onError(FirebaseFirestoreException e) {
         // Show a snackbar on errors
+        Log.d("prout:", e.getLocalizedMessage());
         Snackbar.make(mBinding.getRoot(),
                 "Error: check logs for info.", Snackbar.LENGTH_LONG).show();
       }
     };
 
-    mBinding.myRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    mBinding.myRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     mBinding.myRecyclerView.setAdapter(mAdapter);
 
-//    recyclerView.setAdapter(mAdapter);
-//    OnSwipeListener myListener = new OnSwipeListener() {
-//      @Override
-//      public void onDelete(int position) {
-//        super.onDelete(position);
-//        long id = mAdapter.getItemId(position);
-//
-//        realm.beginTransaction();
-//        myList.remove(position);
-//        realm.commitTransaction();
-//
-//        DataHelper.deleteItemAsync(realm, id);
-//
-//        mAdapter.notifyItemRemoved(position);
-//      }
-//    };
-//    mAdapter.mSwipeListener = myListener;
+    return mBinding.getRoot();
+  }
 
-    return mBinding.getRoot(); // view
+  @Override
+  public void onStart() {
+    super.onStart();
+
+    // Start sign in if necessary
+//    if (shouldStartSignIn()) {
+//      startSignIn();
+//      return;
+//    }
+
+    // Apply filters
+//    onFilter(mViewModel.getFilters());
+
+    // Start listening for Firestore updates
+    if (mAdapter != null) {
+      mAdapter.startListening();
+    }
+  }
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    if (mAdapter != null) {
+      mAdapter.stopListening();
+    }
   }
 
   @Override

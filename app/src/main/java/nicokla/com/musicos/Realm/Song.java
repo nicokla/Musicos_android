@@ -2,6 +2,8 @@ package nicokla.com.musicos.Realm;
 
 import android.util.Log;
 
+import com.google.firebase.firestore.IgnoreExtraProperties;
+
 import java.util.Random;
 
 import io.realm.Realm;
@@ -10,6 +12,7 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
+@IgnoreExtraProperties
 public class Song extends RealmObject {
 
   @PrimaryKey
