@@ -40,6 +40,7 @@ public class SettingsFragment extends Fragment {
 //        HomeFragmentDirections.SeeVideo action =
 //                HomeFragmentDirections.seeVideo(song.videoID);
         Navigation.findNavController(this.getView()).popBackStack(R.id.signInFrag, false);
-                //.navigate(action);
+//        Navigation.findNavController(this.getView()).popBackStack(R.id.signUpFrag, false);
+        //.navigate(action);
     }
 }
