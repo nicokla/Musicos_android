@@ -28,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import io.realm.Realm;
 import io.realm.RealmList;
+import nicokla.com.musicos.Firebase.SongFirestore;
 import nicokla.com.musicos.MainAndCo.GlobalVars;
 import nicokla.com.musicos.databinding.ActivityMainBinding;
 import nicokla.com.musicos.databinding.FragmentMySongsBinding;
@@ -110,6 +111,21 @@ public class MySongsFragment extends Fragment implements SongAdapter.OnSongSelec
 
     mBinding.myRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     mBinding.myRecyclerView.setAdapter(mAdapter);
+    OnSwipeListener myListener = new OnSwipeListener() {
+      @Override
+      public void onDelete(int position) {
+        super.onDelete(position);
+//        long id = mAdapter.getItemId(position);
+//
+//        realm.beginTransaction();
+//        myList.remove(position);
+//        realm.commitTransaction();
+//
+//        DataHelper.deleteItemAsync(realm, id);
+        mAdapter.notifyItemRemoved(position);
+      }
+    };
+    mAdapter.mSwipeListener = myListener;
 
     return mBinding.getRoot();
   }
@@ -143,9 +159,9 @@ public class MySongsFragment extends Fragment implements SongAdapter.OnSongSelec
 
   @Override
   public void onSongSelected(DocumentSnapshot snapshot) {
-    Song song = snapshot.toObject(Song.class);
+    SongFirestore song = snapshot.toObject(SongFirestore.class);
     HomeFragmentDirections.SeeVideo action =
-            HomeFragmentDirections.seeVideo(song.getVideoId());
+            HomeFragmentDirections.seeVideo(song.videoID);
     Navigation.findNavController(mBinding.getRoot()).navigate(action);
   }
 }
