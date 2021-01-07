@@ -17,7 +17,7 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@+id/MySongsFragment"
+            app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -44,7 +44,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="nicokla.com.musicos.navigation.HomeFragment"
-        android:label="HomeFragment" >
+        android:label="Home">
         <action
             android:id="@+id/seeVideo"
             app:destination="@id/playerFragment"
@@ -63,8 +63,8 @@
     <fragment
         android:id="@+id/signInFrag"
         android:name="nicokla.com.musicos.Login.SignInFrag"
-        android:label="fragment_sign_in"
-        tools:layout="@layout/fragment_sign_in" >
+        android:label="Sign In"
+        tools:layout="@layout/fragment_sign_in">
         <action
             android:id="@+id/action_signInFrag_to_homeFragment"
             app:destination="@id/homeFragment"
@@ -83,8 +83,8 @@
     <fragment
         android:id="@+id/signUpFrag"
         android:name="nicokla.com.musicos.Login.SignUpFrag"
-        android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" >
+        android:label="Sign Up"
+        tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/action_signUpFrag_to_homeFragment"
             app:destination="@id/homeFragment"
@@ -103,6 +103,6 @@
     <fragment
         android:id="@+id/mySongsFragment"
         android:name="nicokla.com.musicos.MySongsFrag.MySongsFragment"
-        android:label="fragment_my_songs"
+        android:label="My Songs"
         tools:layout="@layout/fragment_my_songs" />
 </navigation>

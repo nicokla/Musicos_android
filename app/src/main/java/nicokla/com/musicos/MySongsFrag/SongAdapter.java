@@ -122,6 +122,8 @@ public class SongAdapter extends FirestoreAdapter<SongAdapter.ViewHolder> {
             mFirestore.collection("songs")
                     .document(song.objectID)
                     .delete();
+
+
 //                    .addOnSuccessListener(new OnSuccessListener<Void>() {
 //                      @Override
 //                      public void onSuccess(Void aVoid) {
@@ -134,6 +136,9 @@ public class SongAdapter extends FirestoreAdapter<SongAdapter.ViewHolder> {
 //                        Log.w("houp", "Error deleting document", e);
 //                      }
 //                    });
+
+            // TODO: delete storage song document
+
             mSwipeListener.onDelete(getAdapterPosition());
           }
         }

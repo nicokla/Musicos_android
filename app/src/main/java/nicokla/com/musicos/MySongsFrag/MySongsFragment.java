@@ -39,10 +39,6 @@ import nicokla.com.musicos.R;
 import nicokla.com.musicos.Realm.Song;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
-//
 public class MySongsFragment extends Fragment implements SongAdapter.OnSongSelectedListener {
   private SongAdapter mAdapter;
   private FragmentMySongsBinding mBinding;
