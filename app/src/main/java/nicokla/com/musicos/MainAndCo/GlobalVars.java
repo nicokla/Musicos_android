@@ -1,10 +1,12 @@
 package nicokla.com.musicos.MainAndCo;
 
 import com.badlogic.gdx.graphics.Color;
+import com.google.firebase.auth.FirebaseUser;
 
 import nicokla.com.musicos.PlayerFrag.MidiStuff.MidiPlayer;
 
 public class GlobalVars {
+  public FirebaseUser me;
   private static GlobalVars instance = null;
   public String [] notesEnglish = new String[]
           {"C", "C#", "D", "Eb", "E", "F",
