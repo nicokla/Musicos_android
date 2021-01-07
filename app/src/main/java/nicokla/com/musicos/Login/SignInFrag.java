@@ -31,6 +31,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import io.realm.Realm;
+import nicokla.com.musicos.MainAndCo.GlobalVars;
 import nicokla.com.musicos.MainAndCo.MainActivity;
 import nicokla.com.musicos.R;
 import nicokla.com.musicos.navigation.HomeFragmentDirections;
@@ -97,6 +98,8 @@ public class SignInFrag extends Fragment {
       public void onComplete(@NonNull Task<AuthResult> task) {
         if(task.isSuccessful()){
           Log.d("cool:", task.getResult().getUser().toString());
+          GlobalVars.getInstance().me = task.getResult().getUser();
+
 //          Toast.makeText(MainActivity.this,"Login Successfully",Toast.LENGTH_LONG).show();
 //          Intent intent=new Intent(MainActivity.this, nicokla.com.essai2.DashboardActivity.class);
 //          startActivity(intent);
