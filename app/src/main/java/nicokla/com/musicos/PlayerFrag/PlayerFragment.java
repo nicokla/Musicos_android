@@ -122,8 +122,9 @@ public class PlayerFragment extends Fragment
     // Inflate the layout for this fragment
     myView =  inflater.inflate(R.layout.fragment_player, container, false);
     vidId = PlayerFragmentArgs.fromBundle(getArguments()).getVideoId();
+    String songId = PlayerFragmentArgs.fromBundle(getArguments()).getSongId();
 
-    SongStorage.get(vidId, this);
+    SongStorage.get(songId, this);
 
     youTubePlayerView = myView.findViewById(R.id.youtube_player_view);
 //    playPauseButton = view.findViewById(R.id.playPause);
@@ -402,8 +403,13 @@ public class PlayerFragment extends Fragment
 
  @Override
  public void onCallback(SongStorage songStorage) {
+    int i;
+    for (i=0; i < songStorage.scale.length; i++){
+      if (songStorage.scale[i]){
+        Log.d("scale :", String.valueOf(i));
+      }
+    }
    this.songStorage = songStorage;
-   Log.d("salut ca va? :", songStorage.scale.toString());
  }
 }
 

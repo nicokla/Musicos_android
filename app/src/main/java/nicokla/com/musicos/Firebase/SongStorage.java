@@ -86,7 +86,7 @@ public class SongStorage {
     });
   }
 
-  public void delete(String id){
+  public static void delete(String id){
     Log.d("delete", id);
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();

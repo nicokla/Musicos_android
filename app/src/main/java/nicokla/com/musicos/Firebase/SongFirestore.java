@@ -98,11 +98,11 @@ public class SongFirestore {
 //    });
   }
 
-  public void delete(){
-    Log.d("delete", objectID);
+  public static void delete(String id){
+    Log.d("delete", id);
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     db.collection("songs")
-            .document(objectID)
+            .document(id)
             .delete();
   }
 

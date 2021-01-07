@@ -54,14 +54,14 @@ public class MySongsFragment extends Fragment implements SongAdapter.OnSongSelec
                            Bundle savedInstanceState) {
     mBinding = FragmentMySongsBinding.inflate(getLayoutInflater());
 
-    mBinding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Navigation.findNavController(mBinding.getRoot()).navigate( // (view).navigate
-                HomeFragmentDirections.newSong()
-        );
-      }
-    });
+//    mBinding.floatingActionButton.setOnClickListener(new View.OnClickListener() {
+//      @Override
+//      public void onClick(View v) {
+//        Navigation.findNavController(mBinding.getRoot()).navigate( // (view).navigate
+//                HomeFragmentDirections.newSong()
+//        );
+//      }
+//    });
 
     FirebaseFirestore.setLoggingEnabled(true);
     mFirestore = FirebaseFirestore.getInstance();
@@ -157,7 +157,7 @@ public class MySongsFragment extends Fragment implements SongAdapter.OnSongSelec
   public void onSongSelected(DocumentSnapshot snapshot) {
     SongFirestore song = snapshot.toObject(SongFirestore.class);
     HomeFragmentDirections.SeeVideo action =
-            HomeFragmentDirections.seeVideo(song.videoID);
-    Navigation.findNavController(mBinding.getRoot()).navigate(action);
+            HomeFragmentDirections.seeVideo(song.videoID, song.objectID);
+    Navigation.findNavController(getView()).navigate(action);
   }
 }

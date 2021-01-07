@@ -3,6 +3,8 @@ package nicokla.com.musicos.MainAndCo;
 import com.badlogic.gdx.graphics.Color;
 import com.google.firebase.auth.FirebaseUser;
 
+import nicokla.com.musicos.Firebase.SongFirestore;
+import nicokla.com.musicos.Firebase.SongStorage;
 import nicokla.com.musicos.PlayerFrag.MidiStuff.MidiPlayer;
 
 public class GlobalVars {
@@ -36,6 +38,8 @@ public class GlobalVars {
           0xFFA8D6FF, 0xFF0070D6,
   };
   public MidiPlayer midiPlayer = new MidiPlayer();;
+  public SongFirestore songFirestore;
+  public SongStorage songStorage;
 
   protected GlobalVars() {
     // Exists only to defeat instantiation.

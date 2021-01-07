@@ -52,7 +52,7 @@ class SongAdapterOld extends RealmRecyclerViewAdapter<Song, SongAdapterOld.SongH
       @Override
       public void onClick(View view) {
         HomeFragmentDirections.SeeVideo action =
-                HomeFragmentDirections.seeVideo(song.getVideoId());
+                HomeFragmentDirections.seeVideo(song.getVideoId(), "abcdefg");
         Navigation.findNavController(view).navigate(action);
       }
     });
