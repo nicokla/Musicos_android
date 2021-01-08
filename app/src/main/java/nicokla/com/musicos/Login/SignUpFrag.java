@@ -1,6 +1,7 @@
 package nicokla.com.musicos.Login;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -8,6 +9,7 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -130,6 +132,15 @@ public class SignUpFrag extends Fragment {
     setRetainInstance(true);
   }
 
+  @Override
+  public void onPause() {
+    super.onPause();
+    View focusedView = getActivity().getCurrentFocus();
+    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+    if (focusedView != null) {
+      imm.hideSoftInputFromWindow(focusedView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+  }
 
   public SignUpFrag() {
     // Required empty public constructor

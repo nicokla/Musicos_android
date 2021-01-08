@@ -1,14 +1,11 @@
 package nicokla.com.musicos.navigation;
 
 import android.os.Bundle;
-//import android.support.annotation.Nullable;
-//import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,23 +15,22 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.auth.User;
 
 import nicokla.com.musicos.Firebase.SongFirestore;
+import nicokla.com.musicos.Firebase.UserFirestore;
 import nicokla.com.musicos.MainAndCo.GlobalVars;
 import nicokla.com.musicos.MySongsFrag.OnSwipeListener;
-import nicokla.com.musicos.MySongsFrag.SongAdapter;
-import nicokla.com.musicos.R;
 import nicokla.com.musicos.databinding.FavouriteSongsLayoutBinding;
-import nicokla.com.musicos.databinding.FragmentMySongsBinding;
+import nicokla.com.musicos.databinding.FollowedUsersLayoutBinding;
 
-
-public class FavouriteSongsFragment extends Fragment implements NotSwipableSongAdapter.OnSongSelectedListener {
-  private NotSwipableSongAdapter mAdapter;
+public class FollowedUsersFragment extends Fragment implements UserAdapter.OnUserSelectedListener {
+  private UserAdapter mAdapter;
   private FavouriteSongsLayoutBinding mBinding;
   private FirebaseFirestore mFirestore;
   private Query mQuery;
 
-  public FavouriteSongsFragment() {
+  public FollowedUsersFragment() {
     // Required empty public constructor
   }
 
@@ -47,10 +43,10 @@ public class FavouriteSongsFragment extends Fragment implements NotSwipableSongA
     mFirestore = FirebaseFirestore.getInstance();
     mQuery = mFirestore.collection("users")
             .document(GlobalVars.getInstance().me.getUid())
-            .collection("likedSongs");
+            .collection("followedUsers");
 
     // RecyclerView
-    mAdapter = new NotSwipableSongAdapter(mQuery, this) {
+    mAdapter = new UserAdapter(mQuery, this) {
       @Override
       protected void onDataChanged() {
         // Show/hide content if the query returns empty.
@@ -97,10 +93,11 @@ public class FavouriteSongsFragment extends Fragment implements NotSwipableSongA
   }
 
   @Override
-  public void onSongSelected(DocumentSnapshot snapshot) {
-    SongFirestore song = snapshot.toObject(SongFirestore.class);
-    HomeFragmentDirections.SeeVideo action =
-            HomeFragmentDirections.seeVideo(song.videoID, song.objectID);
-    Navigation.findNavController(getView()).navigate(action);
+  public void onUserSelected(DocumentSnapshot snapshot) {
+    UserFirestore user = snapshot.toObject(UserFirestore.class);
+//    HomeFragmentDirections.SeeVideo action =
+//            HomeFragmentDirections.seeVideo(song.videoID, song.objectID);
+//    Navigation.findNavController(getView()).navigate(action);
   }
 }
+

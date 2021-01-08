@@ -140,7 +140,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage'
 ////    https://firebase.google.com/docs/storage/android/start
 ////    implementation 'com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava'
-    implementation 'com.github.bumptech.glide:glide:3.7.0'
+//    implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.google.code.gson:gson:2.8.6'
 
 }

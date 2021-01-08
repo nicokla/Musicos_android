@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/searchYtbFragment"
         android:name="nicokla.com.musicos.SearchYtbFrag.SearchYtbFragment"
-        android:label="Search"
+        android:label="Search video"
         tools:layout="@layout/fragment_search_ytb">
         <action
             android:id="@+id/confirmVideo"
@@ -46,19 +46,27 @@
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/addSongFragment"
+            app:popUpToInclusive="false" />
         <action
             android:id="@+id/newSongWithoutVideo"
             app:destination="@id/addSongWithoutVideoFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/addSongFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="nicokla.com.musicos.navigation.SettingsFragment"
-        android:label="Settings" />
+        android:label="Settings" >
+        <action
+            android:id="@+id/seeFollowedUsers"
+            app:destination="@id/followedUsersFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="nicokla.com.musicos.navigation.HomeFragment"
@@ -119,7 +127,7 @@
     <fragment
         android:id="@+id/addSongWithoutVideoFragment"
         android:name="nicokla.com.musicos.navigation.AddSongWithoutVideoFragment"
-        android:label="AddSongWithoutVideoFragment" >
+        android:label="Add song">
         <action
             android:id="@+id/confirmWithoutVideo"
             app:destination="@id/playerFragment"
@@ -130,4 +138,8 @@
             app:popUpTo="@id/addSongFragment"
             app:popUpToInclusive="false" />
     </fragment>
+    <fragment
+        android:id="@+id/followedUsersFragment"
+        android:name="nicokla.com.musicos.navigation.FollowedUsersFragment"
+        android:label="Followed Users" />
 </navigation>

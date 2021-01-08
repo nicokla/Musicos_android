@@ -19,10 +19,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import nicokla.com.musicos.R;
 
 public class SettingsFragment extends Fragment {
+    View view;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        view = inflater.inflate(R.layout.fragment_settings, container, false);
         Button logOutButton=view.findViewById(R.id.logOut);
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -30,7 +31,15 @@ public class SettingsFragment extends Fragment {
                 logout();
             }
         });
-
+        Button followedUsersButton = view.findViewById(R.id.followedUsers);
+        followedUsersButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate( // (view).navigate
+                        SettingsFragmentDirections.seeFollowedUsers()
+                );
+            }
+        });
         return view;
     }
 

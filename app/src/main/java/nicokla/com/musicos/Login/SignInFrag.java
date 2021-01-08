@@ -129,7 +129,10 @@ public class SignInFrag extends Fragment {
   @Override
   public void onPause() {
     super.onPause();
+    View focusedView = getActivity().getCurrentFocus();
     InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-    imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+    if (focusedView != null) {
+      imm.hideSoftInputFromWindow(focusedView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
   }
 }

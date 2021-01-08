@@ -9,7 +9,7 @@
         android:id="@+id/search_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search"
+        android:hint="Search video here"
         android:imeOptions="actionSearch"
         android:inputType="text"
         android:maxLines="1"

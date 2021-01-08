@@ -2,7 +2,6 @@ package nicokla.com.musicos.MySongsFrag;
 
 
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,27 +10,16 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+//import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import nicokla.com.musicos.Firebase.SongFirestore;
 import nicokla.com.musicos.Firebase.SongStorage;
 import nicokla.com.musicos.R;
-import nicokla.com.musicos.Realm.Song;
-import nicokla.com.musicos.databinding.SwipableCellBinding;
-import nicokla.com.musicos.databinding.VideoItemBinding;
-import nicokla.com.musicos.navigation.HomeFragmentDirections;
 
 public class SongAdapter extends FirestoreAdapter<SongAdapter.ViewHolder> {
   static public OnSwipeListener mSwipeListener;
