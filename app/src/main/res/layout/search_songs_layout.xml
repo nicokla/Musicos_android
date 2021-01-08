@@ -15,7 +15,6 @@ android:orientation="vertical"
         android:imeOptions="actionSearch"
         android:inputType="text"
         android:maxLines="1"
-        android:background="@android:color/white"
         android:layout_height="40dp"
         />
 <!--    android:background="@drawable/rectangular_field"-->

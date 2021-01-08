@@ -1,5 +1,7 @@
 package nicokla.com.musicos.MainAndCo;
 
+//import com.algolia.search.saas.Client;
+//import com.algolia.search.saas.Index;
 import com.badlogic.gdx.graphics.Color;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -40,6 +42,9 @@ public class GlobalVars {
   public MidiPlayer midiPlayer = new MidiPlayer();;
   public SongFirestore songFirestore;
   public SongStorage songStorage;
+//  Client client = new Client("SKJIA8T5Z2", "5e2190935369d22de34d9ff049391343");
+//  Index indexUsers = client.getIndex("users");
+//  Index indexSongs = client.getIndex("songs");
 
   protected GlobalVars() {
     // Exists only to defeat instantiation.
