@@ -8,13 +8,14 @@ android:orientation="vertical"
 <EditText
     android:id="@+id/search_input"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="Search users here"
+    android:hint="Search user here"
     android:imeOptions="actionSearch"
     android:inputType="text"
     android:maxLines="1"
     android:focusable="true"
     android:focusableInTouchMode="true"
+    android:background="@android:color/white"
+    android:layout_height="40dp"
     />
 
 <androidx.recyclerview.widget.RecyclerView
