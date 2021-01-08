@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -105,8 +106,14 @@ public class MySongsFragment extends Fragment implements SongAdapter.OnSongSelec
       }
     };
 
-    mBinding.myRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+    mBinding.myRecyclerView.setLayoutManager(layoutManager);
     mBinding.myRecyclerView.setAdapter(mAdapter);
+    DividerItemDecoration dividerItemDecoration =
+            new DividerItemDecoration(mBinding.myRecyclerView.getContext(),
+            layoutManager.getOrientation());
+    mBinding.myRecyclerView.addItemDecoration(dividerItemDecoration);
+
     OnSwipeListener myListener = new OnSwipeListener() {
       @Override
       public void onDelete(int position) {

@@ -59,6 +59,12 @@ public class SearchYtbFragment extends Fragment {
     // Required empty public constructor
   }
 
+  @Override
+  public void onPause() {
+    super.onPause();
+    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+  }
 
   @Override
   public void onDestroy() {

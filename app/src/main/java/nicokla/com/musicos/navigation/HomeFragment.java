@@ -40,6 +40,7 @@ public class HomeFragment extends Fragment {
 
     TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
     tabLayout.setupWithViewPager(mViewPager);
+    tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
     return view;
   }

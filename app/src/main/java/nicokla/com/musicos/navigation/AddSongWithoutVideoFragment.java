@@ -1,9 +1,11 @@
 package nicokla.com.musicos.navigation;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
@@ -35,5 +37,12 @@ public class AddSongWithoutVideoFragment extends Fragment {
       }
     });
     return view;
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
   }
 }

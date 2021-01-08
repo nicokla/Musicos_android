@@ -38,6 +38,8 @@ public class SearchFragment extends Fragment {
         setupViewPager(mViewPager);
 
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+//        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+//        tabLayout.setTabMode(TabLayout.MODE_FIXED);
         tabLayout.setupWithViewPager(mViewPager);
 
         return view;

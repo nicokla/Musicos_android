@@ -43,7 +43,6 @@ public class SignInFrag extends Fragment {
   private TextView SignUpTv;
   private ProgressDialog progressDialog;
   private FirebaseAuth firebaseAuth;
-
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -125,5 +124,12 @@ public class SignInFrag extends Fragment {
 
   public SignInFrag() {
     // Required empty public constructor
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
   }
 }
