@@ -1,4 +1,4 @@
-package nicokla.com.musicos.algolia
+package nicokla.com.musicos.algolia.user
 
 import com.algolia.instantsearch.core.highlighting.HighlightedString
 import com.algolia.instantsearch.helper.highlighting.Highlightable
@@ -7,8 +7,8 @@ import kotlinx.serialization.Transient
 import kotlinx.serialization.json.JsonObject
 
 
-data class Product(
-        val name: String,
+data class User(
+        val name: String, // name
         override val _highlightResult: JsonObject?
 ) : Highlightable {
 

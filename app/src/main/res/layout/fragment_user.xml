@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/productList"
+        android:id="@+id/userList"
         app:layout_constraintTop_toBottomOf="@id/stats"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
