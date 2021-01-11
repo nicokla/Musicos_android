@@ -4,24 +4,20 @@ import android.graphics.Point;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
-import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.SeekBar;
 
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerUtils;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
@@ -30,20 +26,17 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 
 import java.util.Hashtable;
 
-import io.realm.Realm;
-import jp.kshoji.javax.sound.midi.InvalidMidiDataException;
-import jp.kshoji.javax.sound.midi.Receiver;
-import jp.kshoji.javax.sound.midi.ShortMessage;
-import jp.kshoji.javax.sound.midi.impl.SequencerImpl;
 import nicokla.com.musicos.Firebase.SongFirestore;
 import nicokla.com.musicos.Firebase.SongStorage;
+import nicokla.com.musicos.Firebase.UserFirestore;
 import nicokla.com.musicos.MainAndCo.GlobalVars;
 import nicokla.com.musicos.MainAndCo.MainActivity;
 //import nicokla.com.musicos.PlayerFrag.LibgdxStuff.GameFragment;
 import nicokla.com.musicos.PlayerFrag.LibgdxStuff.GameFragment;
 import nicokla.com.musicos.R;
-import nicokla.com.musicos.Realm.DataHelper;
-import nicokla.com.musicos.navigation.HomeFragmentDirections;
+import nicokla.com.musicos.databinding.FragmentOtherUserBinding;
+import nicokla.com.musicos.databinding.FragmentPlayerBinding;
+import nicokla.com.musicos.navigation.OtherUserFragmentDirections;
 //import nicokla.com.musicos.SearchFrag.SearchFragmentDirections;
 
 import com.badlogic.gdx.backends.android.AndroidxFragmentApplication;
@@ -53,7 +46,8 @@ import com.badlogic.gdx.backends.android.AndroidxFragmentApplication;
  */
 public class PlayerFragment extends Fragment
         implements  AndroidxFragmentApplication.Callbacks,
-        View.OnTouchListener, SongStorage.MyCallback
+        View.OnTouchListener, SongStorage.MyCallback,
+        SongFirestore.CallbackContainerLiked
          {
   MainActivity activity;
   public YouTubePlayerView youTubePlayerView;
@@ -75,6 +69,8 @@ public class PlayerFragment extends Fragment
 
   SongStorage songStorage;
   SongFirestore songFirestore;
+  FragmentPlayerBinding mBinding;
+  boolean isLiked = false;
 
   int screenWidth ;
   int screenHeight ;
@@ -83,6 +79,16 @@ public class PlayerFragment extends Fragment
   //  ImageButton playPauseButton;
   //  SeekBar seekBar;
   //           Boolean isPlaying=true;
+
+  public void actionIfLiked(SongFirestore song){
+    isLiked = true;
+    mBinding.likeButton.setText("Dislike");
+  }
+
+   public void actionIfNotLiked(SongFirestore song){
+     isLiked = false;
+     mBinding.likeButton.setText("Like");
+   }
 
   public PlayerFragment() {
     // Required empty public constructor
@@ -121,25 +127,22 @@ public class PlayerFragment extends Fragment
     int screenHeight = size.y;
 
     // Inflate the layout for this fragment
-    myView =  inflater.inflate(R.layout.fragment_player, container, false);
+     mBinding = FragmentPlayerBinding.inflate(getLayoutInflater());
+     myView = mBinding.getRoot();
+//     myView =  inflater.inflate(R.layout.fragment_player, container, false);
      vidId = PlayerFragmentArgs.fromBundle(getArguments()).getVideoId();
     String songId = PlayerFragmentArgs.fromBundle(getArguments()).getSongId();
+    GlobalVars.getInstance().songFirestore.objectID = songId;
 
-    SongStorage.get(songId, this);
+    SongStorage.load(songId, this);
 
     youTubePlayerView = myView.findViewById(R.id.youtube_player_view);
-//    playPauseButton = view.findViewById(R.id.playPause);
-//    seekBar = view.findViewById(R.id.video_time);
     myConstraintLayout = myView.findViewById(R.id.root);
-//    myFrameLayout = new FrameLayout(this.getContext());
-//    myFrameLayout.setId(View.generateViewId());
     myFrameLayout = myView.findViewById(R.id.content_framelayout);
     set = new ConstraintSet();
 
-     Button buttonDown = myView.findViewById(R.id.buttonDown);
-     Button buttonUp = myView.findViewById(R.id.buttonUp);
-     buttonDown.setOnTouchListener(this);
-     buttonUp.setOnTouchListener(this);
+     Button buttonBack = myView.findViewById(R.id.buttonBack);
+     buttonBack.setOnTouchListener(this);
 
     //playNextVideoButton = view.findViewById(R.id.next_video_button);
     //initYouTubePlayerView();
@@ -159,7 +162,49 @@ public class PlayerFragment extends Fragment
       }
     });
 
-    return myView;
+     GlobalVars.getInstance().songFirestore.checkIfLiked(this);
+
+     SongFirestore.CallbackContainerLiked callbackContainer = this;
+     mBinding.likeButton.setOnClickListener(new View.OnClickListener() {
+       @Override
+       public void onClick(View v) {
+         SongFirestore song = GlobalVars.getInstance().songFirestore;
+         if(isLiked){
+           song.dislike(callbackContainer);
+         }else{
+           song.like(callbackContainer);
+         }
+       }
+     });
+
+     mBinding.settingsButton.setOnClickListener(new View.OnClickListener() {
+       @Override
+       public void onClick(View view) {
+         Navigation.findNavController(getView()) .navigate(
+               PlayerFragmentDirections.Companion.actionPlayerFragmentToSongSettingsFragment()
+         );
+       }
+     });
+
+     myView.setFocusableInTouchMode(true);
+     myView.requestFocus();
+     myView.setOnKeyListener( new View.OnKeyListener()
+     {
+       @Override
+       public boolean onKey( View v, int keyCode, KeyEvent event )
+       {
+         if( keyCode == KeyEvent.KEYCODE_BACK )
+         {
+           // allows to save data in firebase instead of just going back :
+           actionBackButton();
+           return true;
+         }
+         return false;
+       }
+     } );
+
+
+     return myView;
   }
 
    @Override
@@ -371,11 +416,12 @@ public class PlayerFragment extends Fragment
          switch (id) {
 //           case R.id.playPause:
 //             break;
-           case R.id.buttonDown:
-//             libgdxFragment.myGdxGame.demoCamera.goesDown = true;
-             break;
-           case R.id.buttonUp:
+//           case R.id.buttonDown:
+////             libgdxFragment.myGdxGame.demoCamera.goesDown = true;
+//             break;
+           case R.id.buttonBack:
 //             libgdxFragment.myGdxGame.demoCamera.goesUp = true;
+             actionBackButton();
              break;
 
            default:
@@ -386,10 +432,10 @@ public class PlayerFragment extends Fragment
 
        case MotionEvent.ACTION_UP:
          switch(id){
-           case R.id.buttonDown:
-//             libgdxFragment.myGdxGame.demoCamera.goesDown = false;
-             break;
-           case R.id.buttonUp:
+//           case R.id.buttonDown:
+////             libgdxFragment.myGdxGame.demoCamera.goesDown = false;
+//             break;
+           case R.id.buttonBack:
 //             libgdxFragment.myGdxGame.demoCamera.goesUp = false;
              break;
            default:
@@ -412,6 +458,26 @@ public class PlayerFragment extends Fragment
     }
    this.songStorage = songStorage;
  }
+
+ public void actionBackButton(){
+//   GlobalVars.getInstance().songFirestore.set(
+//           180, // pas bonne duree
+//           System.currentTimeMillis()/1000,
+//           GlobalVars.getInstance().meFirestore.name,
+//           holder.thumbnail.toString(),
+//           singleVideo.getId(),
+//           "",
+//           GlobalVars.getInstance().meFirestore.objectID,
+//           singleVideo.getTitle(),
+//           newId);
+//        GlobalVars.getInstance().songFirestore.save();
+
+//        GlobalVars.getInstance().songStorage = ...
+//        GlobalVars.getInstance().songStorage.save();
+   Navigation.findNavController(getView()).popBackStack();
+ }
+
+
 }
 
 

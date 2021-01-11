@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import io.realm.Realm;
+//import io.realm.Realm;
 import nicokla.com.musicos.R;
 
 
@@ -30,7 +30,7 @@ import nicokla.com.musicos.R;
  */
 public class SearchYtbFragment extends Fragment {
 
-  private Realm realm;
+//  private Realm realm;
 
   //EditText for input search keywords
   private EditText searchInput;
@@ -73,7 +73,7 @@ public class SearchYtbFragment extends Fragment {
   public void onDestroy() {
     super.onDestroy();
     mRecyclerView.setAdapter(null);
-    realm.close();
+//    realm.close();
   }
 
   @Override
@@ -82,7 +82,7 @@ public class SearchYtbFragment extends Fragment {
     // Inflate the layout for this fragment
     View view = inflater.inflate(R.layout.fragment_search_ytb, container, false);
 
-    realm = Realm.getDefaultInstance();
+//    realm = Realm.getDefaultInstance();
 
     //initialising the objects with their respective view in activity_main.xml file
     mProgressDialog = new ProgressDialog(getActivity());

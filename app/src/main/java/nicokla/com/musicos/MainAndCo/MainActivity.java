@@ -9,11 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import io.realm.Realm;
+//import io.realm.Realm;
 import jp.kshoji.javax.sound.midi.InvalidMidiDataException;
 import jp.kshoji.javax.sound.midi.Receiver;
 import jp.kshoji.javax.sound.midi.ShortMessage;
@@ -76,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
         sequencer = new SequencerImpl(60, GlobalVars.getInstance().midiPlayer);
         rcvr = sequencer.sequencerThread.midiEventRecordingReceiver;
 
-        Realm realm = Realm.getDefaultInstance();
-        parent = realm.where(Parent.class).findFirst();
+//        Realm realm = Realm.getDefaultInstance();
+//        parent = realm.where(Parent.class).findFirst();
 //        midiSequencer = new MidiSequencer();
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
@@ -104,6 +105,11 @@ public class MainActivity extends AppCompatActivity {
                     hideBottomNav();
                 } else {
                     showBottomNav();
+                }
+                if(destination.getId() == R.id.playerFragment) {
+                    hideActionBar();
+                } else {
+                    showActionBar();
                 }
             }
         });
@@ -177,4 +183,19 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navBar = this.findViewById(R.id.bottom_navigation);
         navBar.setVisibility(View.GONE);
     }
+
+    private void showActionBar()
+    {
+        ActionBar supportActionBar = this.getSupportActionBar();
+        if (supportActionBar != null)
+            supportActionBar.show();
+    }
+
+    private void hideActionBar()
+    {
+        ActionBar supportActionBar = this.getSupportActionBar();
+        if (supportActionBar != null)
+            supportActionBar.hide();
+    }
+
 }

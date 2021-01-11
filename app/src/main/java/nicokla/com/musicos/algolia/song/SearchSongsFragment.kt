@@ -1,29 +1,22 @@
 package nicokla.com.musicos.algolia.song
 
+//import com.algolia.instantsearch.guides.R
+//import kotlinx.android.synthetic.main.fragment_song.*
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.algolia.instantsearch.core.connection.ConnectionHandler
-//import com.algolia.instantsearch.guides.R
 import com.algolia.instantsearch.helper.android.list.autoScrollToStart
 import com.algolia.instantsearch.helper.android.searchbox.SearchBoxViewAppCompat
 import com.algolia.instantsearch.helper.android.searchbox.connectView
-import com.algolia.instantsearch.helper.android.stats.StatsTextView
-import com.algolia.instantsearch.helper.stats.StatsPresenterImpl
-import com.algolia.instantsearch.helper.stats.connectView
-//import kotlinx.android.synthetic.main.fragment_song.*
-import nicokla.com.musicos.R
-import nicokla.com.musicos.algolia.song.SongAdapter
-import nicokla.com.musicos.algolia.user.MyViewModel
+import nicokla.com.musicos.MainAndCo.GlobalVars
 import nicokla.com.musicos.databinding.FragmentSongBinding
-import nicokla.com.musicos.databinding.FragmentUserBinding
 import nicokla.com.musicos.navigation.SearchFragmentDirections
 
 interface CellClickListener {
@@ -83,6 +76,11 @@ class SearchSongsFragment : Fragment(), CellClickListener {
 
     override fun onCellClickListener(song: Song) {
 //        Toast.makeText(context,"Cell clicked: " + song.title, Toast.LENGTH_SHORT).show()
+        GlobalVars.getInstance().songFirestore.set(
+            song.duration, song.datetime, song.ownerName, song.imageUrl,
+            song.videoID, song.originalID, song.ownerID,
+            song.title, song.objectID.toString()
+        )
         view?.findNavController()?.navigate(
             SearchFragmentDirections.actionSearchFragmentToPlayerFragment(song.videoID, song.objectID.toString())
         )

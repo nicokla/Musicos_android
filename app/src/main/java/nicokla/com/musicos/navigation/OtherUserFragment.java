@@ -17,19 +17,33 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 
 import nicokla.com.musicos.Firebase.SongFirestore;
+import nicokla.com.musicos.Firebase.UserFirestore;
 import nicokla.com.musicos.MainAndCo.GlobalVars;
 import nicokla.com.musicos.PlayerFrag.PlayerFragmentArgs;
 import nicokla.com.musicos.databinding.FragmentOtherUserBinding;
 
-public class OtherUserFragment  extends Fragment implements NotSwipableWithoutAuthorSongAdapter.OnSongSelectedListener {
+public class OtherUserFragment  extends Fragment
+        implements NotSwipableWithoutAuthorSongAdapter.OnSongSelectedListener,
+        UserFirestore.CallbackContainerFollowed{
   private NotSwipableWithoutAuthorSongAdapter mAdapter;
   private FragmentOtherUserBinding mBinding;
   private FirebaseFirestore mFirestore;
   private Query mQuery;
   private String userId;
+  private boolean isFollowed = false;
 
   public OtherUserFragment() {
     // Required empty public constructor
+  }
+
+  public void actionIfFollowed(UserFirestore user){
+    isFollowed = true;
+    mBinding.followButton.setText("Unfollow");
+  }
+
+  public void actionIfNotFollowed(UserFirestore user){
+    isFollowed = false;
+    mBinding.followButton.setText("Follow");
   }
 
   @Override
@@ -42,6 +56,22 @@ public class OtherUserFragment  extends Fragment implements NotSwipableWithoutAu
     userId = OtherUserFragmentArgs.fromBundle(getArguments()).getUserId();
     mQuery = mFirestore.collection("songs")
             .whereEqualTo("ownerID", userId);
+
+    GlobalVars.getInstance().user.objectID = userId;
+    GlobalVars.getInstance().user.checkIfFollowed(this);
+
+    UserFirestore.CallbackContainerFollowed callbackContainer = this;
+    mBinding.followButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        UserFirestore otherUser = GlobalVars.getInstance().user;
+        if(isFollowed){
+          otherUser.unfollow(callbackContainer);
+        }else{
+          otherUser.follow(callbackContainer);
+        }
+      }
+    });
 
     // RecyclerView
     mAdapter = new NotSwipableWithoutAuthorSongAdapter(mQuery, this) {
@@ -93,6 +123,7 @@ public class OtherUserFragment  extends Fragment implements NotSwipableWithoutAu
   @Override
   public void onSongSelected(DocumentSnapshot snapshot) {
     SongFirestore song = snapshot.toObject(SongFirestore.class);
+    GlobalVars.getInstance().songFirestore = song;
     Navigation.findNavController(getView()).navigate(
             OtherUserFragmentDirections.Companion.actionOtherUserFragmentToPlayerFragment(song.videoID, song.objectID)
     );

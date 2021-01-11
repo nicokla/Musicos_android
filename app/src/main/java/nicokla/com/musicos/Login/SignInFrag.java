@@ -30,13 +30,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import io.realm.Realm;
+//import io.realm.Realm;
+import nicokla.com.musicos.Firebase.SongFirestore;
+import nicokla.com.musicos.Firebase.UserFirestore;
 import nicokla.com.musicos.MainAndCo.GlobalVars;
 import nicokla.com.musicos.MainAndCo.MainActivity;
 import nicokla.com.musicos.R;
 import nicokla.com.musicos.navigation.HomeFragmentDirections;
 
-public class SignInFrag extends Fragment {
+public class SignInFrag extends Fragment implements UserFirestore.MyCallback {
 
   private EditText emailEt,passwordEt;
   private Button SignInButton;
@@ -91,6 +93,7 @@ public class SignInFrag extends Fragment {
     progressDialog.setMessage("Please wait...");
     progressDialog.show();
     progressDialog.setCanceledOnTouchOutside(false);
+    UserFirestore.MyCallback callbackContainer = this;
     firebaseAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(getActivity(),
       new OnCompleteListener<AuthResult>() {
       @Override
@@ -98,7 +101,7 @@ public class SignInFrag extends Fragment {
         if(task.isSuccessful()){
           Log.d("cool:", task.getResult().getUser().toString());
           GlobalVars.getInstance().me = task.getResult().getUser();
-
+          UserFirestore.load(GlobalVars.getInstance().me.getUid(), callbackContainer);
 //          Toast.makeText(MainActivity.this,"Login Successfully",Toast.LENGTH_LONG).show();
 //          Intent intent=new Intent(MainActivity.this, nicokla.com.essai2.DashboardActivity.class);
 //          startActivity(intent);
@@ -134,5 +137,10 @@ public class SignInFrag extends Fragment {
     if (focusedView != null) {
       imm.hideSoftInputFromWindow(focusedView.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
+  }
+
+  @Override
+  public void onCallback(UserFirestore userFirestore) {
+    GlobalVars.getInstance().meFirestore = userFirestore;
   }
 }

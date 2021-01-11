@@ -95,6 +95,7 @@ public class FollowedUsersFragment extends Fragment implements UserAdapter.OnUse
   @Override
   public void onUserSelected(DocumentSnapshot snapshot) {
     UserFirestore user = snapshot.toObject(UserFirestore.class);
+    GlobalVars.getInstance().user = user;
     Navigation.findNavController(getView()).navigate(
             FollowedUsersFragmentDirections.Companion.openAUser(user.objectID)
     );

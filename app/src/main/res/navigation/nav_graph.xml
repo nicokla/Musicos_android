@@ -31,6 +31,9 @@
         <argument
             android:name="songId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_playerFragment_to_songSettingsFragment"
+            app:destination="@id/songSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -190,4 +193,9 @@
         android:id="@+id/favouriteSongsFragment"
         android:name="nicokla.com.musicos.navigation.FavouriteSongsFragment"
         android:label="FavouriteSongsFragment" />
+    <fragment
+        android:id="@+id/songSettingsFragment"
+        android:name="nicokla.com.musicos.PlayerFrag.SongSettingsFragment"
+        android:label="Song settings"
+        tools:layout="@layout/fragment_song_settings" />
 </navigation>

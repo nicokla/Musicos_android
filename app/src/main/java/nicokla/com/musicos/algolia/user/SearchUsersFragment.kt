@@ -18,6 +18,7 @@ import com.algolia.instantsearch.helper.android.searchbox.connectView
 import com.algolia.instantsearch.helper.android.stats.StatsTextView
 import com.algolia.instantsearch.helper.stats.StatsPresenterImpl
 import com.algolia.instantsearch.helper.stats.connectView
+import nicokla.com.musicos.MainAndCo.GlobalVars
 //import kotlinx.android.synthetic.main.fragment_user.*
 import nicokla.com.musicos.R
 import nicokla.com.musicos.databinding.FragmentSongBinding
@@ -81,6 +82,8 @@ class SearchUsersFragment : Fragment(), CellClickListener {
 
     override fun onCellClickListener(user: User) {
 //        Toast.makeText(context,"Cell clicked: " + user.name, Toast.LENGTH_SHORT).show()
+        GlobalVars.getInstance().user.name = user.name;
+        GlobalVars.getInstance().user.objectID = user.objectID.toString();
         view?.findNavController()?.navigate(
                 SearchFragmentDirections.actionSearchFragmentToOtherUserFragment(user.objectID.toString())
         )

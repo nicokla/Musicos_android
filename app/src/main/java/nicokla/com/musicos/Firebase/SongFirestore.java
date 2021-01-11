@@ -13,10 +13,16 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
+import nicokla.com.musicos.MainAndCo.GlobalVars;
+
 @IgnoreExtraProperties
 public class SongFirestore {
   public interface MyCallback {
     void onCallback(SongFirestore songFirestore);
+  }
+  public interface CallbackContainerLiked {
+    void actionIfLiked(SongFirestore song);
+    void actionIfNotLiked(SongFirestore song);
   }
 
   public static final String FIELD_DURATION = "duration";
@@ -44,6 +50,14 @@ public class SongFirestore {
   public SongFirestore(float duration, long datetime, String ownerName, String imageUrl,
                        String videoID, String originalID, String ownerID, String title,
                        String objectID) {
+    set(duration, datetime, ownerName, imageUrl,
+            videoID, originalID, ownerID, title,
+            objectID);
+  }
+
+  public void set(float duration, long datetime, String ownerName, String imageUrl,
+             String videoID, String originalID, String ownerID, String title,
+             String objectID){
     this.duration = duration;
     this.datetime = datetime;
     this.ownerName = ownerName;
@@ -55,7 +69,7 @@ public class SongFirestore {
     this.objectID = objectID;
   }
 
-  public static void get(String objectID, MyCallback myCallback){
+  public static void load(String objectID, MyCallback myCallback){
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     DocumentReference docRef = db.collection("songs")
             .document(objectID);
@@ -79,7 +93,7 @@ public class SongFirestore {
 
   }
 
-  public void set(){
+  public void save(){
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     db.collection("songs")
     .document(objectID)
@@ -104,6 +118,65 @@ public class SongFirestore {
     db.collection("songs")
             .document(id)
             .delete();
+  }
+
+// --------------------------------
+
+
+  public void like(CallbackContainerLiked callbackContainer) {
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    SongFirestore song = this;
+    db.collection("users")
+      .document(GlobalVars.getInstance().me.getUid())
+      .collection("likedSongs")
+      .document(objectID)
+      .set(this)
+      .addOnSuccessListener(new OnSuccessListener<Void>() {
+      @Override
+      public void onSuccess(Void aVoid) {
+        callbackContainer.actionIfLiked(song);
+      }
+    });
+  }
+
+  public void dislike(CallbackContainerLiked callbackContainer) {
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    SongFirestore song = this;
+    db.collection("users")
+            .document(GlobalVars.getInstance().me.getUid())
+            .collection("likedSongs")
+            .document(objectID)
+            .delete()
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+              @Override
+              public void onSuccess(Void aVoid) {
+                callbackContainer.actionIfNotLiked(song);
+              }
+            });
+  }
+
+  public void checkIfLiked(CallbackContainerLiked callbackContainer){
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    DocumentReference docRef = db.collection("users")
+            .document(GlobalVars.getInstance().me.getUid())
+            .collection("likedSongs")
+            .document(objectID);
+    SongFirestore song = this;
+    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+      @Override
+      public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+        if (task.isSuccessful()) {
+          DocumentSnapshot document = task.getResult();
+          if (document.exists()) {
+            callbackContainer.actionIfLiked(song);
+          } else {
+            callbackContainer.actionIfNotLiked(song);
+          }
+        } else {
+          Log.d("c balo.", "get failed with ", task.getException());
+        }
+      }
+    });
   }
 
 

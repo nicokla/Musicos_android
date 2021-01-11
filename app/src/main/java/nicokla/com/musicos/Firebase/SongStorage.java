@@ -39,7 +39,7 @@ public class SongStorage {
 
   public SongStorage() {}
 
-  public static void get(String id, MyCallback myCallback){
+  public static void load(String id, MyCallback myCallback){
     Log.d("get", id);
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
@@ -62,7 +62,7 @@ public class SongStorage {
     });
   }
 
-  public void set(String id){
+  public void save(String id){
     Log.d("set", id);
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();

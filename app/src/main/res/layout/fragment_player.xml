@@ -55,24 +55,36 @@ app:autoPlay="true"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonUp"
+        android:id="@+id/buttonBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="276dp"
-        android:layout_marginTop="16dp"
-        android:text="up"
+        android:layout_marginStart="236dp"
+        android:layout_marginTop="24dp"
+        android:text="back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/buttonDown"
+        android:id="@+id/likeButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="276dp"
-        android:layout_marginTop="72dp"
-        android:text="down"
+        android:layout_marginTop="12dp"
+        android:text="like"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.742"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonBack" />
+
+    <Button
+        android:id="@+id/settingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="settings"
+        app:layout_constraintEnd_toStartOf="@+id/likeButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/youtube_player_view" />
+
     <!--         app:layout_constraintHeight_percent="0.3"
      -->
 

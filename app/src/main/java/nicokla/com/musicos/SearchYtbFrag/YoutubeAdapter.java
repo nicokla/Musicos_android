@@ -16,8 +16,9 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 import java.util.UUID;
 
-import io.realm.Realm;
-import nicokla.com.musicos.Realm.DataHelper;
+//import io.realm.Realm;
+//import nicokla.com.musicos.Realm.DataHelper;
+import nicokla.com.musicos.MainAndCo.GlobalVars;
 import nicokla.com.musicos.R;
 
 /**
@@ -113,21 +114,36 @@ public class YoutubeAdapter extends RecyclerView.Adapter<YoutubeAdapter.MyViewHo
             //onClick method called when the view is clicked
             @Override
             public void onClick(View view) {
-                Realm realm = Realm.getDefaultInstance();
-                DataHelper.addItemAsync2(realm,
-                        singleVideo.getTitle(),
-                        singleVideo.getId(),
-                        singleVideo.getThumbnailURL(),
-                        60,
-                        singleVideo.getDescription()
-                );
+//                Realm realm = Realm.getDefaultInstance();
+//                DataHelper.addItemAsync2(realm,
+//                        singleVideo.getTitle(),
+//                        singleVideo.getId(),
+//                        singleVideo.getThumbnailURL(),
+//                        60,
+//                        singleVideo.getDescription()
+//                );
 
                 // CRUD : Create
 
                 // TODO : Create song with video in firebase.
+                String newId = UUID.randomUUID().toString();
+                GlobalVars.getInstance().songFirestore.set(
+                        180, // pas bonne duree
+                        System.currentTimeMillis()/1000,
+                        GlobalVars.getInstance().meFirestore.name,
+                        holder.thumbnail.toString(),
+                        singleVideo.getId(),
+                        "",
+                        GlobalVars.getInstance().meFirestore.objectID,
+                        singleVideo.getTitle(),
+                        newId);
+//        GlobalVars.getInstance().songFirestore.save();
+
+//        GlobalVars.getInstance().songStorage = ...
+//        GlobalVars.getInstance().songStorage.save();
 
                 Navigation.findNavController(view).navigate(
-                        SearchYtbFragmentDirections.Companion.confirmVideo(singleVideo.getId(), UUID.randomUUID().toString())
+                        SearchYtbFragmentDirections.Companion.confirmVideo(singleVideo.getId(), newId)
                 );
 
             }

@@ -24,8 +24,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+import nicokla.com.musicos.Firebase.UserFirestore;
+import nicokla.com.musicos.MainAndCo.GlobalVars;
 import nicokla.com.musicos.R;
+import nicokla.com.musicos.databinding.FavouriteSongsLayoutBinding;
+import nicokla.com.musicos.databinding.FragmentSignUpBinding;
 
 public class SignUpFrag extends Fragment {
   private EditText emailEt,passwordEt1,passwordEt2;
@@ -33,13 +38,15 @@ public class SignUpFrag extends Fragment {
   private TextView SignInTv;
   private ProgressDialog progressDialog;
   private FirebaseAuth firebaseAuth;
+  private FragmentSignUpBinding mBinding;
 
   @Nullable
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     // Inflate the layout for this fragment
-    View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
+    mBinding = FragmentSignUpBinding.inflate(getLayoutInflater());
+    View view = mBinding.getRoot(); //inflater.inflate(R.layout.fragment_sign_up, container, false);
     firebaseAuth=FirebaseAuth.getInstance();
     emailEt=view.findViewById(R.id.email);
     passwordEt1=view.findViewById(R.id.password1);
@@ -104,11 +111,20 @@ public class SignUpFrag extends Fragment {
       @Override
       public void onComplete(@NonNull Task<AuthResult> task) {
         if(task.isSuccessful()){
-          Log.d("cool:", task.getResult().getUser().toString());
+          FirebaseUser user = task.getResult().getUser();
+          GlobalVars.getInstance().me = user;
+
+//          Log.d("cool:", task.getResult().getUser().toString());
 //          Toast.makeText(SignUpActivity.this,"Successfully registered",Toast.LENGTH_LONG).show();
 //          Intent intent=new Intent(SignUpActivity.this,DashboardActivity.class);
 //          startActivity(intent);
 //          finish();
+          UserFirestore userFirestore = new UserFirestore();
+          userFirestore.objectID = user.getUid();
+          userFirestore.name = mBinding.usernameInput.getText().toString();
+          userFirestore.save();
+          GlobalVars.getInstance().meFirestore = userFirestore;
+
           Navigation.findNavController(view).navigate(
                   SignUpFragDirections.Companion.actionSignUpFragToHomeFragment()
           );

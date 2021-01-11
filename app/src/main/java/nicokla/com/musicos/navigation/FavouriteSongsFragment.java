@@ -99,6 +99,7 @@ public class FavouriteSongsFragment extends Fragment implements NotSwipableSongA
   @Override
   public void onSongSelected(DocumentSnapshot snapshot) {
     SongFirestore song = snapshot.toObject(SongFirestore.class);
+    GlobalVars.getInstance().songFirestore = song;
     Navigation.findNavController(getView()).navigate(
       HomeFragmentDirections.Companion.seeVideo(song.videoID, song.objectID)
     );

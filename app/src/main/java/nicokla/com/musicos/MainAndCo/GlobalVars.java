@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import nicokla.com.musicos.Firebase.SongFirestore;
 import nicokla.com.musicos.Firebase.SongStorage;
+import nicokla.com.musicos.Firebase.UserFirestore;
 import nicokla.com.musicos.PlayerFrag.MidiStuff.MidiPlayer;
 
 public class GlobalVars {
@@ -40,8 +41,11 @@ public class GlobalVars {
           0xFFA8D6FF, 0xFF0070D6,
   };
   public MidiPlayer midiPlayer = new MidiPlayer();;
-  public SongFirestore songFirestore;
-  public SongStorage songStorage;
+  public SongFirestore songFirestore = new SongFirestore();
+  public SongStorage songStorage = new SongStorage();
+  public UserFirestore user = new UserFirestore();
+  public UserFirestore meFirestore = new UserFirestore();
+
 //  Client client = new Client("SKJIA8T5Z2", "5e2190935369d22de34d9ff049391343");
 //  Index indexUsers = client.getIndex("users");
 //  Index indexSongs = client.getIndex("songs");

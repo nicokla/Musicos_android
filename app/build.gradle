@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'com.google.gms.google-services'
-    id 'realm-android'
+//    id 'realm-android'
 //    id "androidx.navigation.safeargs"
     id 'kotlin-android'
     id 'kotlinx-serialization'
@@ -96,7 +96,7 @@ dependencies {
 
     implementation 'com.squareup.picasso:picasso:2.71828'
 
-    implementation 'io.realm:android-adapters:3.1.0'
+//    implementation 'io.realm:android-adapters:3.1.0'
 
     implementation 'com.android.support:multidex:1.0.3'
 

@@ -27,17 +27,17 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import io.realm.Realm;
-import io.realm.RealmList;
+//import io.realm.Realm;
+//import io.realm.RealmList;
 import nicokla.com.musicos.Firebase.SongFirestore;
 import nicokla.com.musicos.MainAndCo.GlobalVars;
 import nicokla.com.musicos.databinding.ActivityMainBinding;
 import nicokla.com.musicos.databinding.FragmentMySongsBinding;
 import nicokla.com.musicos.navigation.HomeFragmentDirections;
-import nicokla.com.musicos.Realm.DataHelper;
-import nicokla.com.musicos.Realm.Parent;
+//import nicokla.com.musicos.Realm.DataHelper;
+//import nicokla.com.musicos.Realm.Parent;
 import nicokla.com.musicos.R;
-import nicokla.com.musicos.Realm.Song;
+//import nicokla.com.musicos.Realm.Song;
 
 
 public class MySongsFragment extends Fragment implements SongAdapter.OnSongSelectedListener {
@@ -163,6 +163,7 @@ public class MySongsFragment extends Fragment implements SongAdapter.OnSongSelec
   @Override
   public void onSongSelected(DocumentSnapshot snapshot) {
     SongFirestore song = snapshot.toObject(SongFirestore.class);
+    GlobalVars.getInstance().songFirestore = song;
 //    HomeFragmentDirections.SeeVideo action =
 //            HomeFragmentDirections.seeVideo(song.videoID, song.objectID);
     Navigation.findNavController(getView()).navigate(
