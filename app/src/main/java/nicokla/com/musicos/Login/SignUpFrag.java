@@ -57,7 +57,7 @@ public class SignUpFrag extends Fragment {
       @Override
       public void onClick(View v) {
         Navigation.findNavController(view).navigate(
-                SignUpFragDirections.actionSignUpFragToSignInFrag()
+                SignUpFragDirections.Companion.actionSignUpFragToSignInFrag()
         );
 //        Intent intent=new Intent(SignUpActivity.this, MainActivity.class);
 //        startActivity(intent);
@@ -110,7 +110,7 @@ public class SignUpFrag extends Fragment {
 //          startActivity(intent);
 //          finish();
           Navigation.findNavController(view).navigate(
-                  SignUpFragDirections.actionSignUpFragToHomeFragment()
+                  SignUpFragDirections.Companion.actionSignUpFragToHomeFragment()
           );
         }
         else{

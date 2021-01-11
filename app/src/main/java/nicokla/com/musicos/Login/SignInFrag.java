@@ -68,7 +68,7 @@ public class SignInFrag extends Fragment {
 //        startActivity(intent);
 //        finish();
         Navigation.findNavController(view).navigate(
-                SignInFragDirections.actionSignInFragToSignUpFrag()
+                SignInFragDirections.Companion.actionSignInFragToSignUpFrag()
         );
       }
     });
@@ -104,7 +104,7 @@ public class SignInFrag extends Fragment {
 //          startActivity(intent);
 //          finish();
           Navigation.findNavController(view).navigate(
-                  SignInFragDirections.actionSignInFragToHomeFragment()
+                  SignInFragDirections.Companion.actionSignInFragToHomeFragment()
           );
         }
         else{

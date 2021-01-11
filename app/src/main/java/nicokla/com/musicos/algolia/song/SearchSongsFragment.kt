@@ -1,4 +1,4 @@
-package nicokla.com.musicos.algolia.user
+package nicokla.com.musicos.algolia.song
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.algolia.instantsearch.core.connection.ConnectionHandler
 //import com.algolia.instantsearch.guides.R
@@ -17,20 +18,23 @@ import com.algolia.instantsearch.helper.android.searchbox.connectView
 import com.algolia.instantsearch.helper.android.stats.StatsTextView
 import com.algolia.instantsearch.helper.stats.StatsPresenterImpl
 import com.algolia.instantsearch.helper.stats.connectView
-//import kotlinx.android.synthetic.main.fragment_user.*
+//import kotlinx.android.synthetic.main.fragment_song.*
 import nicokla.com.musicos.R
+import nicokla.com.musicos.algolia.song.SongAdapter
+import nicokla.com.musicos.algolia.user.MyViewModel
 import nicokla.com.musicos.databinding.FragmentSongBinding
 import nicokla.com.musicos.databinding.FragmentUserBinding
+import nicokla.com.musicos.navigation.SearchFragmentDirections
 
 interface CellClickListener {
-    fun onCellClickListener(user: User)
+    fun onCellClickListener(song: Song)
 }
 
-class UserFragment : Fragment(), CellClickListener {
-
+class SearchSongsFragment : Fragment(), CellClickListener {
     private val connection = ConnectionHandler()
-//    private lateinit var binding: FragmentUserBinding
-    private var _binding: FragmentUserBinding? = null
+
+//    private lateinit var binding: FragmentSongBinding
+    private var _binding: FragmentSongBinding? = null
     // This property is only valid between onCreateView and
 // onDestroyView.
     private val binding get() = _binding!!
@@ -40,33 +44,34 @@ class UserFragment : Fragment(), CellClickListener {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentUserBinding.inflate(inflater, container, false)
+        _binding = FragmentSongBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
-//        return inflater.inflate(R.layout.fragment_user, container, false)
+//        return inflater.inflate(R.layout.fragment_song, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewModel = ViewModelProvider(requireActivity())[MyViewModel::class.java]
+        val viewModel = ViewModelProvider(requireActivity())[MyViewModelSongs::class.java]
+//        val view = binding.root
 
-        val adapterUser = UserAdapter(this)
-        viewModel.users.observe(
+        val adapterSong = SongAdapter(this)
+        viewModel.songs.observe(
                 viewLifecycleOwner,
-                Observer { hits -> adapterUser.submitList(hits) })
+                Observer { hits -> adapterSong.submitList(hits) })
 
-        binding.userList.let {
+        binding.songList.let {
             it.itemAnimator = null
-            it.adapter = adapterUser
+            it.adapter = adapterSong
             it.layoutManager = LinearLayoutManager(requireContext())
-            it.autoScrollToStart(adapterUser)
+            it.autoScrollToStart(adapterSong)
         }
 
         val searchBoxView = SearchBoxViewAppCompat(binding.searchView)
         connection += viewModel.searchBox.connectView(searchBoxView)
 
-        val statsView = StatsTextView(binding.stats)
-        connection += viewModel.stats.connectView(statsView, StatsPresenterImpl())
+//        val statsView = StatsTextView(stats)
+//        connection += viewModel.stats.connectView(statsView, StatsPresenterImpl())
 
 //        filters.setOnClickListener {  }
     }
@@ -74,11 +79,13 @@ class UserFragment : Fragment(), CellClickListener {
     override fun onDestroyView() {
         super.onDestroyView()
         connection.clear()
-        _binding = null
     }
 
-    override fun onCellClickListener(user: User) {
-        Toast.makeText(context,"Cell clicked: " + user.name, Toast.LENGTH_SHORT).show()
+    override fun onCellClickListener(song: Song) {
+//        Toast.makeText(context,"Cell clicked: " + song.title, Toast.LENGTH_SHORT).show()
+        view?.findNavController()?.navigate(
+            SearchFragmentDirections.actionSearchFragmentToPlayerFragment(song.videoID, song.objectID.toString())
+        )
     }
 
 }

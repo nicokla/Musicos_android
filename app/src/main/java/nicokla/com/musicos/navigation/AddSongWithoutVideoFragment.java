@@ -32,7 +32,7 @@ public class AddSongWithoutVideoFragment extends Fragment {
       public void onClick(View v) {
         // TODO : Create song without video in firebase.
         Navigation.findNavController(view).navigate(
-           AddSongWithoutVideoFragmentDirections.confirmWithoutVideo("",  UUID.randomUUID().toString())
+           AddSongWithoutVideoFragmentDirections.Companion.confirmWithoutVideo("",  UUID.randomUUID().toString())
         );
       }
     });

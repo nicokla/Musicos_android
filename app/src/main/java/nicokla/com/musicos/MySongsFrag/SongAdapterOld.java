@@ -51,9 +51,9 @@ class SongAdapterOld extends RealmRecyclerViewAdapter<Song, SongAdapterOld.SongH
       //onClick method called when the view is clicked
       @Override
       public void onClick(View view) {
-        HomeFragmentDirections.SeeVideo action =
-                HomeFragmentDirections.seeVideo(song.getVideoId(), "abcdefg");
-        Navigation.findNavController(view).navigate(action);
+//        HomeFragmentDirections.SeeVideo action =
+//                HomeFragmentDirections.seeVideo(song.getVideoId(), "abcdefg");
+//        Navigation.findNavController(view).navigate(action);
       }
     });
 

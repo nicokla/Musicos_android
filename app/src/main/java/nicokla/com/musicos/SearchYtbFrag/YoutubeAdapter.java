@@ -121,14 +121,14 @@ public class YoutubeAdapter extends RecyclerView.Adapter<YoutubeAdapter.MyViewHo
                         60,
                         singleVideo.getDescription()
                 );
-                SearchYtbFragmentDirections.ConfirmVideo action =
-                        SearchYtbFragmentDirections.confirmVideo(singleVideo.getId(), UUID.randomUUID().toString());
 
                 // CRUD : Create
 
                 // TODO : Create song with video in firebase.
 
-                Navigation.findNavController(view).navigate(action);
+                Navigation.findNavController(view).navigate(
+                        SearchYtbFragmentDirections.Companion.confirmVideo(singleVideo.getId(), UUID.randomUUID().toString())
+                );
 
             }
         });

@@ -22,8 +22,8 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import nicokla.com.musicos.algolia.song.SongFragment;
-import nicokla.com.musicos.algolia.user.UserFragment;
+import nicokla.com.musicos.algolia.song.SearchSongsFragment;
+import nicokla.com.musicos.algolia.user.SearchUsersFragment;
 import nicokla.com.musicos.R;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -52,10 +52,10 @@ public class SearchFragment extends Fragment {
         Adapter adapter = new Adapter(getChildFragmentManager());
 
 //        adapter.addFragment(new SearchSongsFragment(), "Songs");
-        adapter.addFragment(new SongFragment(), "Songs"); // !!!
+        adapter.addFragment(new SearchSongsFragment(), "Songs"); // !!!
 
 //        adapter.addFragment(new SearchUsersFragment(), "Users");
-        adapter.addFragment(new UserFragment(), "Users"); // !!!
+        adapter.addFragment(new SearchUsersFragment(), "Users"); // !!!
 
 //        adapter.addFragment(new nicokla.com.musicos.navigation.Frag3(), "Featured");
         viewPager.setAdapter(adapter);

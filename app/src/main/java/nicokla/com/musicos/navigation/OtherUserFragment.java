@@ -15,38 +15,36 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.auth.User;
 
 import nicokla.com.musicos.Firebase.SongFirestore;
-import nicokla.com.musicos.Firebase.UserFirestore;
 import nicokla.com.musicos.MainAndCo.GlobalVars;
-import nicokla.com.musicos.MySongsFrag.OnSwipeListener;
-import nicokla.com.musicos.databinding.FavouriteSongsLayoutBinding;
-import nicokla.com.musicos.databinding.FollowedUsersLayoutBinding;
+import nicokla.com.musicos.PlayerFrag.PlayerFragmentArgs;
+import nicokla.com.musicos.databinding.FragmentOtherUserBinding;
 
-public class FollowedUsersFragment extends Fragment implements UserAdapter.OnUserSelectedListener {
-  private UserAdapter mAdapter;
-  private FavouriteSongsLayoutBinding mBinding;
+public class OtherUserFragment  extends Fragment implements NotSwipableWithoutAuthorSongAdapter.OnSongSelectedListener {
+  private NotSwipableWithoutAuthorSongAdapter mAdapter;
+  private FragmentOtherUserBinding mBinding;
   private FirebaseFirestore mFirestore;
   private Query mQuery;
+  private String userId;
 
-  public FollowedUsersFragment() {
+  public OtherUserFragment() {
     // Required empty public constructor
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-    mBinding = FavouriteSongsLayoutBinding.inflate(getLayoutInflater());
+    mBinding = FragmentOtherUserBinding.inflate(getLayoutInflater());
 
     FirebaseFirestore.setLoggingEnabled(true);
     mFirestore = FirebaseFirestore.getInstance();
-    mQuery = mFirestore.collection("users")
-            .document(GlobalVars.getInstance().me.getUid())
-            .collection("followedUsers");
+    userId = OtherUserFragmentArgs.fromBundle(getArguments()).getUserId();
+    mQuery = mFirestore.collection("songs")
+            .whereEqualTo("ownerID", userId);
 
     // RecyclerView
-    mAdapter = new UserAdapter(mQuery, this) {
+    mAdapter = new NotSwipableWithoutAuthorSongAdapter(mQuery, this) {
       @Override
       protected void onDataChanged() {
         // Show/hide content if the query returns empty.
@@ -93,11 +91,10 @@ public class FollowedUsersFragment extends Fragment implements UserAdapter.OnUse
   }
 
   @Override
-  public void onUserSelected(DocumentSnapshot snapshot) {
-    UserFirestore user = snapshot.toObject(UserFirestore.class);
+  public void onSongSelected(DocumentSnapshot snapshot) {
+    SongFirestore song = snapshot.toObject(SongFirestore.class);
     Navigation.findNavController(getView()).navigate(
-            FollowedUsersFragmentDirections.Companion.openAUser(user.objectID)
+            OtherUserFragmentDirections.Companion.actionOtherUserFragmentToPlayerFragment(song.videoID, song.objectID)
     );
   }
 }
-

@@ -30,7 +30,7 @@ public class AddSongFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(mBinding.getRoot()).navigate( // (view).navigate
-                        AddSongFragmentDirections.newSong()
+                        AddSongFragmentDirections.Companion.newSong()
                 );
             }
         });
@@ -38,7 +38,7 @@ public class AddSongFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Navigation.findNavController(mBinding.getRoot()).navigate( // (view).navigate
-                        AddSongFragmentDirections.newSongWithoutVideo()
+                        AddSongFragmentDirections.Companion.newSongWithoutVideo()
                 );
             }
         });

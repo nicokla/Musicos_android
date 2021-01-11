@@ -16,6 +16,7 @@ import com.algolia.search.model.IndexName
 import io.ktor.client.features.logging.LogLevel
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import nicokla.com.musicos.algolia.song.Song
 
 class MyViewModel : ViewModel() {
 
@@ -29,12 +30,16 @@ class MyViewModel : ViewModel() {
     val index = client.initIndex(IndexName("users")) // bestbuy_promo
     val searcher = SearcherSingleIndex(index)
 
-    val dataSourceFactory = SearcherSingleIndexDataSource.Factory(searcher) { hit ->
-        User(
-                hit.json.getValue("name").jsonPrimitive.content,
-                hit.json["_highlightResult"]?.jsonObject
-        )
+    val dataSourceFactory = SearcherSingleIndexDataSource.Factory(searcher) {
+        it.deserialize(User.serializer())
     }
+
+//    { hit ->
+//        User(
+//                hit.json.getValue("name").jsonPrimitive.content,
+//                hit.json["_highlightResult"]?.jsonObject
+//        )
+//    }
     val pagedListConfig =
             PagedList.Config.Builder().setPageSize(50).setEnablePlaceholders(false).build()
     val users: LiveData<PagedList<User>> =

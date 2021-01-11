@@ -163,8 +163,11 @@ public class MySongsFragment extends Fragment implements SongAdapter.OnSongSelec
   @Override
   public void onSongSelected(DocumentSnapshot snapshot) {
     SongFirestore song = snapshot.toObject(SongFirestore.class);
-    HomeFragmentDirections.SeeVideo action =
-            HomeFragmentDirections.seeVideo(song.videoID, song.objectID);
-    Navigation.findNavController(getView()).navigate(action);
+//    HomeFragmentDirections.SeeVideo action =
+//            HomeFragmentDirections.seeVideo(song.videoID, song.objectID);
+    Navigation.findNavController(getView()).navigate(
+            HomeFragmentDirections.Companion.seeVideo(song.videoID, song.objectID)
+//            MySongsFragmentDirections.Companion.actionMySongsFragmentToPlayerFragment(song.videoID, song.objectID)
+    );
   }
 }

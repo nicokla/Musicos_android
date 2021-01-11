@@ -43,6 +43,7 @@ import nicokla.com.musicos.MainAndCo.MainActivity;
 import nicokla.com.musicos.PlayerFrag.LibgdxStuff.GameFragment;
 import nicokla.com.musicos.R;
 import nicokla.com.musicos.Realm.DataHelper;
+import nicokla.com.musicos.navigation.HomeFragmentDirections;
 //import nicokla.com.musicos.SearchFrag.SearchFragmentDirections;
 
 import com.badlogic.gdx.backends.android.AndroidxFragmentApplication;
@@ -121,7 +122,7 @@ public class PlayerFragment extends Fragment
 
     // Inflate the layout for this fragment
     myView =  inflater.inflate(R.layout.fragment_player, container, false);
-    vidId = PlayerFragmentArgs.fromBundle(getArguments()).getVideoId();
+     vidId = PlayerFragmentArgs.fromBundle(getArguments()).getVideoId();
     String songId = PlayerFragmentArgs.fromBundle(getArguments()).getSongId();
 
     SongStorage.get(songId, this);

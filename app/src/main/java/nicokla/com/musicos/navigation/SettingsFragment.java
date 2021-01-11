@@ -36,7 +36,16 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(view).navigate( // (view).navigate
-                        SettingsFragmentDirections.seeFollowedUsers()
+                        SettingsFragmentDirections.Companion.seeFollowedUsers()
+                );
+            }
+        });
+        Button gemsButton = view.findViewById(R.id.gemsButton);
+        gemsButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(view).navigate( // (view).navigate
+                        SettingsFragmentDirections.Companion.actionSettingsFragmentToGemsFragment()
                 );
             }
         });
