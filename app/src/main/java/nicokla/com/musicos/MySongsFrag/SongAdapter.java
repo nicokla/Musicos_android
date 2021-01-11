@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 //import com.bumptech.glide.Glide;
@@ -54,8 +55,8 @@ public class SongAdapter extends FirestoreAdapter<SongAdapter.ViewHolder> {
 
   static class ViewHolder extends RecyclerView.ViewHolder {
     public ImageView thumbnail;
-    public TextView video_title, video_id, video_description;
-    public RelativeLayout video_view;
+    public TextView video_title; //, video_id, video_description;
+    public ConstraintLayout video_view;
     public Button btnDelete;
 
 //    private VideoItemBinding binding;
@@ -69,9 +70,9 @@ public class SongAdapter extends FirestoreAdapter<SongAdapter.ViewHolder> {
       super(view);
       thumbnail = (ImageView) view.findViewById(R.id.video_thumbnail);
       video_title = (TextView) view.findViewById(R.id.video_title);
-      video_id = (TextView) view.findViewById(R.id.video_id);
-      video_description = (TextView) view.findViewById(R.id.video_description);
-      video_view = (RelativeLayout) view.findViewById(R.id.video_view);
+//      video_id = (TextView) view.findViewById(R.id.video_id);
+//      video_description = (TextView) view.findViewById(R.id.video_description);
+      video_view = (ConstraintLayout) view.findViewById(R.id.video_view);
       btnDelete = itemView.findViewById(R.id.btnDelete);
     }
 
@@ -94,8 +95,8 @@ public class SongAdapter extends FirestoreAdapter<SongAdapter.ViewHolder> {
                 .centerCrop()
                 .into(thumbnail);
       }
-      video_description.setText("super la description.");
-      video_id.setText(song.videoID);
+//      video_description.setText("super la description.");
+//      video_id.setText(song.videoID);
       video_title.setText(song.getTitle());
 
       // Click listener
