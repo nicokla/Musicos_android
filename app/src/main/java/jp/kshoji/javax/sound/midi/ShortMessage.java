@@ -69,7 +69,7 @@ public class ShortMessage extends MidiMessage {
      * @param data2 the second data
      * @throws InvalidMidiDataException
      */
-    public ShortMessage(final int status, final int data1, final int data2) throws InvalidMidiDataException {
+    public ShortMessage(final int status, final int data1, final int data2) throws InvalidMidiDataException { //
         super(null);
         setMessage(status, data1, data2);
     }
@@ -110,15 +110,15 @@ public class ShortMessage extends MidiMessage {
      * @param data2 the second data
 	 * @throws InvalidMidiDataException
 	 */
-	public void setMessage(final int status, final int data1, final int data2) throws InvalidMidiDataException {
+	public void setMessage(final int status, final int data1, final int data2) throws InvalidMidiDataException { //
 		final int dataLength = getDataLength(status);
 		if (dataLength > 0) {
 			if (data1 < 0 || data1 > 0x7f) {
-				throw new InvalidMidiDataException("data1 out of range: " + data1);
+//				throw new InvalidMidiDataException("data1 out of range: " + data1);
 			}
 			if (dataLength > 1) {
 				if (data2 < 0 || data2 > 0x7f) {
-					throw new InvalidMidiDataException("data2 out of range: " + data2);
+//					throw new InvalidMidiDataException("data2 out of range: " + data2);
 				}
 			}
 		}

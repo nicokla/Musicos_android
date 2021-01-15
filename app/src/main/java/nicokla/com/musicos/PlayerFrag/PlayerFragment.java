@@ -57,7 +57,7 @@ import com.badlogic.gdx.backends.android.AndroidxFragmentApplication;
  */
 public class PlayerFragment extends Fragment
         implements  AndroidxFragmentApplication.Callbacks,
-        View.OnTouchListener, SongStorage.MyCallback,
+        View.OnTouchListener,
         SongFirestore.CallbackContainerLiked
          {
   MainActivity activity;
@@ -112,12 +112,12 @@ public class PlayerFragment extends Fragment
 
   public void actionIfLiked(SongFirestore song){
     isLiked = true;
-    mBinding.likeButton.setText("Dislike");
+    mBinding.likeButton.setImageResource(R.drawable.heart_full);
   }
 
    public void actionIfNotLiked(SongFirestore song){
      isLiked = false;
-     mBinding.likeButton.setText("Like");
+     mBinding.likeButton.setImageResource(R.drawable.heart);
    }
 
   public PlayerFragment() {
@@ -172,8 +172,7 @@ public class PlayerFragment extends Fragment
     myFrameLayout = myView.findViewById(R.id.content_framelayout);
     set = new ConstraintSet();
 
-     Button buttonBack = myView.findViewById(R.id.buttonBack);
-     buttonBack.setOnTouchListener(this);
+     mBinding.buttonBack.setOnTouchListener(this);
 
     //playNextVideoButton = view.findViewById(R.id.next_video_button);
     //initYouTubePlayerView();
@@ -238,6 +237,7 @@ public class PlayerFragment extends Fragment
 
      if (GlobalVars.getInstance().songFirestore.videoID == "") {
        startRepeatingTask();
+       mBinding.youtubePlayerView.setVisibility(View.INVISIBLE);
      }
 
      return myView;
@@ -254,83 +254,10 @@ public class PlayerFragment extends Fragment
      createGuideLines();
      remplirLignes(tableau);
      preparerLibGdxSubView();
-     SongStorage.load(songId, this);
 
    }
 
-
-   void populateCanvas(){
-    SongStorage songStorage = GlobalVars.getInstance().songStorage;
-     int i;
-     int midiNote;
-
-     for (i=0; i < songStorage.notes.length; i++) {
-       NoteFirebase note = songStorage.notes[i];
-       midiNote = note.midiNote;
-      libgdxFragment.pianoTiles.gameScreen.addTileAtTime(
-          GlobalVars.getInstance().positions[(midiNote - 48) % 12],
-         (midiNote - 48) / 12,
-          GlobalVars.getInstance().isDieseInts[(midiNote - 48) % 12],
-              (long)note.start);
-     }
-   }
-
-
-   void populateMidi(){
-     SongStorage songStorage = GlobalVars.getInstance().songStorage;
-     int i;
-     float start, end;
-     int velocity, midiNote;
-     MidiEvent event;
-     activity.sequencer.sequencerThread.recordingTrack = activity.sequencer.sequence.createTrack();
-     for (i=0; i < songStorage.notes.length; i++){
-       NoteFirebase note = songStorage.notes[i];
-       start = note.start;
-       end = note.start + note.duration;
-       midiNote = note.midiNote;
-       velocity = note.velocity;
-
-       ShortMessage message = new ShortMessage();
-       try {
-         message.setMessage(ShortMessage.NOTE_ON, 0, midiNote, velocity);
-       } catch (InvalidMidiDataException e) {
-         e.printStackTrace();
-       }
-       event = new MidiEvent(message, (long) (start * 1000.0f * activity.sequencer.getTicksPerMicrosecond()));
-       activity.sequencer.sequencerThread.recordingTrack.add(event);
-
-       message = new ShortMessage();
-       try {
-         message.setMessage(ShortMessage.NOTE_OFF, 0, midiNote, 0);
-       } catch (InvalidMidiDataException e) {
-         e.printStackTrace();
-       }
-       event = new MidiEvent(message, (long) (end * 1000.0f * activity.sequencer.getTicksPerMicrosecond()));
-       activity.sequencer.sequencerThread.recordingTrack.add(event);
-
-     }
-     Log.i("cTropCool:", "oupas.");
-     activity.sequencer.sequencerThread.refreshPlayingTrack();
-   }
-
-   @Override
-   public void onCallback(SongStorage songStorage) {
-     GlobalVars.getInstance().songStorage = songStorage;
-     populateMidi();
-     populateCanvas();
-   }
-
-   @Override
-   public void onStop() {
-     super.onStop();
-     if (GlobalVars.getInstance().songFirestore.videoID == "") {
-       stopRepeatingTask();
-     }
-     activity.sequencer.sequencerThread.refreshPlayingTrack();
-     Track track = activity.sequencer.sequencerThread.playingTrack;
-     if(track == null){
-       return;
-     }
+   void saveSong(Track track){
      float duration, start;
      int midiNote, velocity;
      float[] debuts = new float[150]; // index is midi pitch
@@ -341,7 +268,7 @@ public class PlayerFragment extends Fragment
      List<NoteFirebase> notes = new ArrayList<NoteFirebase>();
      for (int i = 0; i < track.size(); i++) {
        final MidiEvent midiEvent = track.get(i);
-       time = midiEvent.getTick() / activity.sequencer.getTicksPerMicrosecond() / 1000;
+       time = midiEvent.getTick() / activity.sequencer.getTicksPerMicrosecond() / 1000000;
        final MidiMessage midiMessage = midiEvent.getMessage();
        if (midiMessage instanceof ShortMessage) {
          final ShortMessage shortMessage = (ShortMessage) midiMessage;
@@ -349,8 +276,8 @@ public class PlayerFragment extends Fragment
            case ShortMessage.NOTE_ON:// !!!
              midiNote = shortMessage.getData1();
              velocity = shortMessage.getData2();
-              seenDebut[midiNote] = true;
-              debuts[midiNote] = time;
+             seenDebut[midiNote] = true;
+             debuts[midiNote] = time;
              velocities[midiNote] = velocity;
              break;
            case ShortMessage.NOTE_OFF:// !!!
@@ -370,6 +297,24 @@ public class PlayerFragment extends Fragment
      GlobalVars.getInstance().songStorage.save(GlobalVars.getInstance().songFirestore.objectID);
      GlobalVars.getInstance().songFirestore.save(); // to fix duration, actually only useful first time
      // is only useful for ios because ios version uses this number for slider max time.
+   }
+
+   @Override
+   public void onStop() {
+     super.onStop();
+     if (GlobalVars.getInstance().songFirestore.videoID == "") {
+       stopRepeatingTask();
+     }
+     activity.sequencer.sequencerThread.refreshPlayingTrack();
+     Track track = activity.sequencer.sequencerThread.playingTrack;
+     if(track != null) {
+       Log.d("ehoh", GlobalVars.getInstance().meFirestore.objectID);
+       Log.d("ehoh2", GlobalVars.getInstance().songFirestore.ownerID);
+       if (GlobalVars.getInstance().meFirestore.objectID
+               .equals(GlobalVars.getInstance().songFirestore.ownerID)) {
+         saveSong(track);
+       }
+     }
      activity.deinitSequencer();
   }
 

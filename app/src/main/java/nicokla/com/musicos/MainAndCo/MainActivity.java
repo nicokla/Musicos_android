@@ -5,6 +5,7 @@ import android.os.Bundle;
 //import android.support.design.widget.BottomNavigationView;
 //import android.support.v4.app.Fragment;
 //import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -16,9 +17,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 //import io.realm.Realm;
 import jp.kshoji.javax.sound.midi.InvalidMidiDataException;
+import jp.kshoji.javax.sound.midi.MidiEvent;
 import jp.kshoji.javax.sound.midi.Receiver;
 import jp.kshoji.javax.sound.midi.ShortMessage;
 import jp.kshoji.javax.sound.midi.impl.SequencerImpl;
+import nicokla.com.musicos.Firebase.NoteFirebase;
+import nicokla.com.musicos.Firebase.SongStorage;
 import nicokla.com.musicos.PlayerFrag.LibgdxStuff.GameScreen;
 import nicokla.com.musicos.PlayerFrag.YoutubeController;
 import nicokla.com.musicos.R;
@@ -39,7 +43,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 //        with
 //        com.google.android.material.bottomnavigation.BottomNavigationView
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        SongStorage.MyCallback{
     //    public MidiSequencer midiSequencer;
     public GameScreen gameScreen;
     public YoutubeController youtubeController;
@@ -47,6 +52,63 @@ public class MainActivity extends AppCompatActivity {
     public SequencerImpl sequencer;
     public Receiver rcvr;
     private NavController navController;
+
+    void populateCanvas(){
+        SongStorage songStorage = GlobalVars.getInstance().songStorage;
+        int i;
+        int midiNote;
+
+        for (i=0; i < songStorage.notes.length; i++) {
+            NoteFirebase note = songStorage.notes[i];
+            midiNote = note.midiNote;
+            gameScreen.addTileAtTime(
+                    GlobalVars.getInstance().positions[(midiNote - 48) % 12],
+                    (midiNote - 48) / 12,
+                    GlobalVars.getInstance().isDieseInts[(midiNote - 48) % 12],
+                    note.start);
+        }
+    }
+
+
+    void populateMidi() throws InvalidMidiDataException {
+        SongStorage songStorage = GlobalVars.getInstance().songStorage;
+        int i;
+        float start, end;
+        int velocity, midiNote;
+        MidiEvent event;
+        sequencer.sequencerThread.recordingTrack = sequencer.sequence.createTrack();
+        for (i=0; i < songStorage.notes.length; i++){
+            NoteFirebase note = songStorage.notes[i];
+            start = note.start;
+            end = note.start + note.duration;
+            midiNote = note.midiNote;
+            velocity = note.velocity;
+
+            sequencer.sequencerThread.recordingTrack.add(
+                    new MidiEvent(new ShortMessage(ShortMessage.NOTE_ON, midiNote, velocity),
+                             (long) (start * 1000000 * sequencer.getTicksPerMicrosecond()))
+            );
+
+            sequencer.sequencerThread.recordingTrack.add(
+                    new MidiEvent(new ShortMessage(ShortMessage.NOTE_OFF, midiNote, 0),
+                            (long) (end * 1000000 * sequencer.getTicksPerMicrosecond()))
+            );
+
+        }
+        Log.i("cTropCool:", "oupas.");
+        sequencer.sequencerThread.refreshPlayingTrack();
+    }
+
+    @Override
+    public void onCallback(SongStorage songStorage) {
+        GlobalVars.getInstance().songStorage = songStorage;
+        try {
+            populateMidi();
+        } catch (InvalidMidiDataException e) {
+            e.printStackTrace();
+        }
+        populateCanvas();
+    }
 
 
     public void sendNoteOn(int data1, int data2){

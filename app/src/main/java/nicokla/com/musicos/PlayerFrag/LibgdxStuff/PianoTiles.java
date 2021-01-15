@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 
+import nicokla.com.musicos.Firebase.SongStorage;
+import nicokla.com.musicos.MainAndCo.GlobalVars;
 import nicokla.com.musicos.MainAndCo.MainActivity;
 
 
@@ -30,6 +32,7 @@ public class PianoTiles extends Game {
 		gameScreen = new GameScreen(this, mainActivity);
 		mainActivity.gameScreen = gameScreen;
 		setScreen(gameScreen);
+		SongStorage.load(GlobalVars.getInstance().songFirestore.objectID, mainActivity);
 	}
 
 	public void loadAssets() {

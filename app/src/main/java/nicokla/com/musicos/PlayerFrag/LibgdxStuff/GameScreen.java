@@ -64,7 +64,7 @@ public class GameScreen implements Screen {
         hauteurReelle = (float) Gdx.graphics.getHeight();
     }
 
-    public void addTileAtTime(int column, int line, int isDiese, long time) {
+    public void addTileAtTime(int column, int line, int isDiese, float time) {
         final Tile tile = generateTileAtTime(column, line, isDiese, time);
 //        tiles.add(tile);
         tile.addListener(new InputListener() {
@@ -83,15 +83,15 @@ public class GameScreen implements Screen {
     }
 
     public void addTile(int column, int line, int isDiese) {
-        addTileAtTime(column, line, isDiese, mainActivity.sequencer.getMicrosecondPosition()/1000);
+        addTileAtTime(column, line, isDiese, ((float)mainActivity.sequencer.getMicrosecondPosition())/1000000);
     }
 
-    public float getCoordinateFromTime(long time){
-        float time2 = (float) time;
-        return ((time2 / 3000 * hauteurReelle)); // - 130f
+    public float getCoordinateFromTime(float time){
+//        float time2 = (float) time;
+        return ((time/3 * hauteurReelle)); // - 130f
     }
 
-    public Tile generateTileAtTime(int column, int line, int isDiese, long time) {
+    public Tile generateTileAtTime(int column, int line, int isDiese, float time) {
         Tile tile = new Tile(column, getCoordinateFromTime(time));
 //        int col = tile.getColumn();
         tile.setColor(GlobalVars.getInstance().colors[line][isDiese]);
@@ -101,14 +101,14 @@ public class GameScreen implements Screen {
     }
 
     public Tile generateTile(int column, int line, int isDiese) {
-        return generateTileAtTime(column, line, isDiese, mainActivity.sequencer.getMicrosecondPosition()/1000);
+        return generateTileAtTime(column, line, isDiese, ((float)mainActivity.sequencer.getMicrosecondPosition())/1000000);
     }
 
     public void update() {
         Gdx.input.setInputProcessor(stage);
         stage.act();
         // We update accu in order for the camera to move
-        accu = getCoordinateFromTime(mainActivity.sequencer.getMicrosecondPosition()/1000);
+        accu = getCoordinateFromTime(((float)mainActivity.sequencer.getMicrosecondPosition())/1000000);
     }
 
     @Override
