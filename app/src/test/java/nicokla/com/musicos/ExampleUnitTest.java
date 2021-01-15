@@ -1,4 +1,4 @@
-package nicokla.com.musicos;
+package com.nicokla.musicos2;
 
 import org.junit.Test;
 

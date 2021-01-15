@@ -1,4 +1,4 @@
-package nicokla.com.musicos;
+package com.nicokla.musicos2;
 
 import android.content.Context;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("nicokla.com.musicos", appContext.getPackageName());
+        assertEquals("com.nicokla.musicos2", appContext.getPackageName());
     }
 }

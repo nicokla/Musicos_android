@@ -13,7 +13,7 @@ plugins {
 //    id "org.jetbrains.kotlin.multiplatform"
 
 ext {
-    appName = "Musicos"
+    appName = "Musicos2"
     gdxVersion = '1.9.9'
     roboVMVersion = '2.3.6'
     box2DLightsVersion = '1.4'
@@ -26,10 +26,10 @@ ext {
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "nicokla.com.musicos"
+        applicationId "com.nicokla.musicos2"
         multiDexEnabled true
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

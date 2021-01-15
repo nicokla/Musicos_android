@@ -49,8 +49,7 @@ import jp.kshoji.javax.sound.midi.Track.TrackUtils;
 import jp.kshoji.javax.sound.midi.Transmitter;
 import jp.kshoji.javax.sound.midi.io.StandardMidiFileReader;
 
-import nicokla.com.musicos.PlayerFrag.MidiStuff.MidiPlayer;
-import nicokla.com.musicos.PlayerFrag.MidiStuff.Utils;
+import com.nicokla.musicos2.PlayerFrag.MidiStuff.MidiPlayer;
 
 //import nicokla.com.myapplication.MidiPlayer;
 //import nicokla.com.myapplication.Utils;

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/searchYtbFragment"
-        android:name="nicokla.com.musicos.SearchYtbFrag.SearchYtbFragment"
+        android:name="com.nicokla.musicos2.SearchYtbFrag.SearchYtbFragment"
         android:label="Search video"
         tools:layout="@layout/fragment_search_ytb">
         <action
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/playerFragment"
-        android:name="nicokla.com.musicos.PlayerFrag.PlayerFragment"
+        android:name="com.nicokla.musicos2.PlayerFrag.PlayerFragment"
         android:label="Play"
         tools:layout="@layout/fragment_player">
         <argument
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="nicokla.com.musicos.navigation.SearchFragment"
+        android:name="com.nicokla.musicos2.navigation.SearchFragment"
         android:label="Search" >
         <action
             android:id="@+id/action_searchFragment_to_otherUserFragment"
@@ -48,7 +48,7 @@
     </fragment>
     <fragment
         android:id="@+id/addSongFragment"
-        android:name="nicokla.com.musicos.navigation.AddSongFragment"
+        android:name="com.nicokla.musicos2.navigation.AddSongFragment"
         android:label="Add song" >
         <action
             android:id="@+id/newSong"
@@ -71,7 +71,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="nicokla.com.musicos.navigation.SettingsFragment"
+        android:name="com.nicokla.musicos2.navigation.SettingsFragment"
         android:label="Settings" >
         <action
             android:id="@+id/seeFollowedUsers"
@@ -82,7 +82,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="nicokla.com.musicos.navigation.HomeFragment"
+        android:name="com.nicokla.musicos2.navigation.HomeFragment"
         android:label="Home">
         <action
             android:id="@+id/seeVideo"
@@ -94,7 +94,7 @@
     </fragment>
     <fragment
         android:id="@+id/signInFrag"
-        android:name="nicokla.com.musicos.Login.SignInFrag"
+        android:name="com.nicokla.musicos2.Login.SignInFrag"
         android:label="Sign In"
         tools:layout="@layout/fragment_sign_in">
         <action
@@ -114,7 +114,7 @@
     </fragment>
     <fragment
         android:id="@+id/signUpFrag"
-        android:name="nicokla.com.musicos.Login.SignUpFrag"
+        android:name="com.nicokla.musicos2.Login.SignUpFrag"
         android:label="Sign Up"
         tools:layout="@layout/fragment_sign_up">
         <action
@@ -134,12 +134,12 @@
     </fragment>
     <fragment
         android:id="@+id/mySongsFragment"
-        android:name="nicokla.com.musicos.MySongsFrag.MySongsFragment"
+        android:name="com.nicokla.musicos2.MySongsFrag.MySongsFragment"
         android:label="My Songs"
         tools:layout="@layout/fragment_my_songs" />
     <fragment
         android:id="@+id/addSongWithoutVideoFragment"
-        android:name="nicokla.com.musicos.navigation.AddSongWithoutVideoFragment"
+        android:name="com.nicokla.musicos2.navigation.AddSongWithoutVideoFragment"
         android:label="Add song">
         <action
             android:id="@+id/confirmWithoutVideo"
@@ -153,7 +153,7 @@
     </fragment>
     <fragment
         android:id="@+id/followedUsersFragment"
-        android:name="nicokla.com.musicos.navigation.FollowedUsersFragment"
+        android:name="com.nicokla.musicos2.navigation.FollowedUsersFragment"
         android:label="Followed Users" >
         <action
             android:id="@+id/openAUser"
@@ -166,7 +166,7 @@
     </fragment>
     <fragment
         android:id="@+id/otherUserFragment"
-        android:name="nicokla.com.musicos.navigation.OtherUserFragment"
+        android:name="com.nicokla.musicos2.navigation.OtherUserFragment"
         android:label="User"
         tools:layout="@layout/fragment_other_user">
         <action
@@ -178,24 +178,24 @@
     </fragment>
     <fragment
         android:id="@+id/gemsFragment"
-        android:name="nicokla.com.musicos.navigation.GemsFragment"
+        android:name="com.nicokla.musicos2.navigation.GemsFragment"
         android:label="Gems"
         tools:layout="@layout/fragment_gems" />
     <fragment
         android:id="@+id/searchSongsFragment"
-        android:name="nicokla.com.musicos.algolia.song.SearchSongsFragment"
+        android:name="com.nicokla.musicos2.algolia.song.SearchSongsFragment"
         android:label="SearchSongsFragment" />
     <fragment
         android:id="@+id/searchUsersFragment"
-        android:name="nicokla.com.musicos.algolia.user.SearchUsersFragment"
+        android:name="com.nicokla.musicos2.algolia.user.SearchUsersFragment"
         android:label="SearchUsersFragment" />
     <fragment
         android:id="@+id/favouriteSongsFragment"
-        android:name="nicokla.com.musicos.navigation.FavouriteSongsFragment"
+        android:name="com.nicokla.musicos2.navigation.FavouriteSongsFragment"
         android:label="FavouriteSongsFragment" />
     <fragment
         android:id="@+id/songSettingsFragment"
-        android:name="nicokla.com.musicos.PlayerFrag.SongSettingsFragment"
+        android:name="com.nicokla.musicos2.PlayerFrag.SongSettingsFragment"
         android:label="Song settings"
         tools:layout="@layout/fragment_song_settings" />
 </navigation>

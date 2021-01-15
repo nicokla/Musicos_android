@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:845227245926:android:1ab3ce075330677ea3c8a7",
+        "mobilesdk_app_id": "1:845227245926:android:4d6c8ae14cbad651a3c8a7",
         "android_client_info": {
-          "package_name": "nicokla.com.musicos"
+          "package_name": "com.nicokla.musicos2"
         }
       },
       "oauth_client": [
