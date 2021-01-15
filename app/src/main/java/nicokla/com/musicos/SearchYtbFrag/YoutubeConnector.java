@@ -75,7 +75,7 @@
       try {
 
         // Define the API request for retrieving search results.
-        query = youtube.search().list("id,snippet");
+        query = youtube.search().list("id,snippet"); // contentDetails
 
               //setting API key to query
               // Set your developer key from the {{ Google Cloud Console }} for
@@ -96,7 +96,10 @@
               //-title of video
               //-description of video
               //high quality thumbnail url of the video
-        query.setFields("items(id/kind,id/videoId,snippet/title,snippet/description,snippet/thumbnails/high/url)");
+        query.setFields("items(id/kind,id/videoId,snippet/title,snippet/description,snippet/thumbnails/default/url)");
+
+        //,contentDetails/duration
+// https://stackoverflow.com/questions/27393842/contentdetails-or-duration-not-coming-using-youtube-v3-api/27415212
 
       } catch (IOException e) {
 
@@ -175,7 +178,8 @@
 
                   //getting High quality thumbnail object
                   //URL of thumbnail is in the heirarchy snippet/thumbnails/high/url
-          Thumbnail thumbnail = singleVideo.getSnippet().getThumbnails().getHigh();
+          Thumbnail thumbnail = singleVideo.getSnippet().getThumbnails().getDefault();
+//          String duration = singleVideo.get
 
                   //retrieving title,description,thumbnail url, id from the heirarchy of each resource
                   //Video ID - id/videoId

@@ -130,7 +130,7 @@ public class SignUpFrag extends Fragment {
           );
         }
         else{
-          Log.d("oups:", task.getException().getMessage());
+          Log.e("oups:", task.getException().getMessage());
           Toast.makeText(getActivity(),"Sign up fail!",Toast.LENGTH_LONG).show();
         }
         progressDialog.dismiss();

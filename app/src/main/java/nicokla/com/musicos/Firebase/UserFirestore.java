@@ -39,7 +39,7 @@ public class UserFirestore {
 
   public static void load(String objectID, UserFirestore.MyCallback myCallback){
     FirebaseFirestore db = FirebaseFirestore.getInstance();
-    DocumentReference docRef = db.collection("songs")
+    DocumentReference docRef = db.collection("users")
             .document(objectID);
     docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
       @Override

@@ -60,7 +60,10 @@ public class YoutubeController extends AbstractYouTubePlayerListener {
 
     seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
       @Override
-      public void onStopTrackingTouch(SeekBar seekBar) { }
+      public void onStopTrackingTouch(SeekBar seekBar) {
+        youTubePlayer.pause();
+//        mainActivity.sequencer.stop();
+      }
       @Override
       public void onStartTrackingTouch(SeekBar seekBar) {
 //        mainActivity.sequencer.stop();
@@ -110,6 +113,7 @@ public class YoutubeController extends AbstractYouTubePlayerListener {
   @Override
   public void onReady(YouTubePlayer youTubePlayer) {
     super.onReady(youTubePlayer);
+//    youTubePlayer.pause();
   }
 
   @Override

@@ -2,6 +2,7 @@ package nicokla.com.musicos.navigation;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.navigation.Navigation;
 
 import java.util.UUID;
 
+import nicokla.com.musicos.Firebase.SongStorage;
 import nicokla.com.musicos.Login.SignInFragDirections;
 import nicokla.com.musicos.MainAndCo.GlobalVars;
 import nicokla.com.musicos.R;
@@ -36,11 +38,19 @@ public class AddSongWithoutVideoFragment extends Fragment {
     letsGo.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        // TODO : Create song without video in firebase.
-
         String newId =  UUID.randomUUID().toString();
+        String durationTxt = mBinding.inputDuration.getText().toString();
+        Float duration;
+        if(durationTxt != ""){
+          duration = Float.parseFloat(durationTxt) * 60;
+        }else{
+          duration = new Float(180.0);
+        }
+
+        // CRUD: Create
+        Log.d("newId", newId);
         GlobalVars.getInstance().songFirestore.set(
-                Float.parseFloat(mBinding.inputDuration.getText().toString()),
+                duration,
                 System.currentTimeMillis()/1000,
                 GlobalVars.getInstance().meFirestore.name,
                 "",
@@ -49,10 +59,10 @@ public class AddSongWithoutVideoFragment extends Fragment {
                 GlobalVars.getInstance().me.getUid(),
                 mBinding.inputTitle.getText().toString(),
                 newId);
-//        GlobalVars.getInstance().songFirestore.save();
+        GlobalVars.getInstance().songFirestore.save();
 
-//        GlobalVars.getInstance().songStorage = ...
-//        GlobalVars.getInstance().songStorage.save();
+        GlobalVars.getInstance().songStorage = new SongStorage();
+        GlobalVars.getInstance().songStorage.save(newId);
 
         Navigation.findNavController(view).navigate(
            AddSongWithoutVideoFragmentDirections.Companion.confirmWithoutVideo("", newId)

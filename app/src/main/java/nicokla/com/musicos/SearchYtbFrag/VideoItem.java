@@ -19,6 +19,8 @@ public class VideoItem {
     //stores the url of thumbnail of video
     private String thumbnailURL;
 
+//    private String durationString;
+
 
     //getter and setter methods for id
     public String getId() {

@@ -68,7 +68,7 @@ public class SequencerImpl implements Sequencer {
     private final Map<Track, Set<Integer>> recordEnable = new HashMap<Track, Set<Integer>>();
     @Nullable
     public SequencerThread sequencerThread = null;
-    private Sequence sequence = null;
+    public Sequence sequence = null;
     private int loopCount = 0;
     private long loopStartPoint = 0;
     private long loopEndPoint = -1;

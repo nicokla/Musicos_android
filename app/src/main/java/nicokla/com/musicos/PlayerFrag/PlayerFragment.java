@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -24,8 +25,17 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.List;
 
+import jp.kshoji.javax.sound.midi.InvalidMidiDataException;
+import jp.kshoji.javax.sound.midi.MidiEvent;
+import jp.kshoji.javax.sound.midi.MidiMessage;
+import jp.kshoji.javax.sound.midi.ShortMessage;
+import jp.kshoji.javax.sound.midi.Track;
+import nicokla.com.musicos.Firebase.NoteFirebase;
 import nicokla.com.musicos.Firebase.SongFirestore;
 import nicokla.com.musicos.Firebase.SongStorage;
 import nicokla.com.musicos.Firebase.UserFirestore;
@@ -67,8 +77,8 @@ public class PlayerFragment extends Fragment
   Hashtable<Integer, Integer> idToIsDiese;
   Hashtable<Integer, Integer>  idToTrenteSix;
 
-  SongStorage songStorage;
-  SongFirestore songFirestore;
+//  SongStorage songStorage;
+//  SongFirestore songFirestore;
   FragmentPlayerBinding mBinding;
   boolean isLiked = false;
 
@@ -121,6 +131,8 @@ public class PlayerFragment extends Fragment
     idToTrenteSix=new Hashtable<Integer, Integer>();
     activity = (MainActivity)getActivity();
 
+    activity.initSequencer();;
+
     Point size = new Point();
     activity.getWindowManager().getDefaultDisplay().getSize(size);
     int screenWidth = size.x;
@@ -159,6 +171,8 @@ public class PlayerFragment extends Fragment
                 youTubePlayer, getLifecycle(),
                 vidId,0f
         );
+        youTubePlayer.pause();
+        activity.youtubeController.playPauseButton.setImageResource(R.drawable.ic_play_arrow_black_48dp);
       }
     });
 
@@ -220,6 +234,90 @@ public class PlayerFragment extends Fragment
      preparerLibGdxSubView();
 
    }
+
+
+   @Override
+   public void onCallback(SongStorage songStorage) {
+     GlobalVars.getInstance().songStorage = songStorage;
+     int i;
+     float start, end;
+     int velocity, midiNote;
+     MidiEvent event;
+     activity.sequencer.sequencerThread.recordingTrack = activity.sequencer.sequence.createTrack();
+     for (i=0; i < songStorage.notes.length; i++){
+       NoteFirebase note = songStorage.notes[i];
+       start = note.start;
+       end = note.start + note.duration;
+       midiNote = note.midiNote;
+       velocity = note.velocity;
+
+        ShortMessage message = new ShortMessage();
+       try {
+         message.setMessage(ShortMessage.NOTE_ON, 0, midiNote, velocity);
+       } catch (InvalidMidiDataException e) {
+         e.printStackTrace();
+       }
+       event = new MidiEvent(message, (long) (start * 1000.0f * activity.sequencer.getTicksPerMicrosecond()));
+       activity.sequencer.sequencerThread.recordingTrack.add(event);
+
+       message = new ShortMessage();
+       try {
+         message.setMessage(ShortMessage.NOTE_OFF, 0, midiNote, 0);
+       } catch (InvalidMidiDataException e) {
+         e.printStackTrace();
+       }
+       event = new MidiEvent(message, (long) (end * 1000.0f * activity.sequencer.getTicksPerMicrosecond()));
+       activity.sequencer.sequencerThread.recordingTrack.add(event);
+
+     }
+     Log.i("cTropCool:", "oupas.");
+     activity.sequencer.sequencerThread.refreshPlayingTrack();
+   }
+
+   @Override
+   public void onStop() {
+     super.onStop();
+     Track track = activity.sequencer.sequencerThread.playingTrack;
+     activity.sequencer.sequencerThread.refreshPlayingTrack();
+     float duration, start;
+     int midiNote, velocity;
+     float[] debuts = new float[150]; // index is midi pitch
+     int[] velocities = new int[150];
+     boolean[] seenDebut = new boolean[150];
+     Arrays.fill(seenDebut, false);
+     float time; // In Millisecond
+     List<NoteFirebase> notes = new ArrayList<NoteFirebase>();
+     for (int i = 0; i < track.size(); i++) {
+       final MidiEvent midiEvent = track.get(i);
+       time = midiEvent.getTick() / activity.sequencer.getTicksPerMicrosecond() / 1000;
+       final MidiMessage midiMessage = midiEvent.getMessage();
+       if (midiMessage instanceof ShortMessage) {
+         final ShortMessage shortMessage = (ShortMessage) midiMessage;
+         switch (shortMessage.getCommand()) {
+           case ShortMessage.NOTE_ON:// !!!
+             midiNote = shortMessage.getData1();
+             velocity = shortMessage.getData2();
+              seenDebut[midiNote] = true;
+              debuts[midiNote] = time;
+             velocities[midiNote] = velocity;
+             break;
+           case ShortMessage.NOTE_OFF:// !!!
+             midiNote = shortMessage.getData1();
+             if(seenDebut[midiNote]){
+               start = debuts[midiNote];
+               duration = time - debuts[midiNote];
+               notes.add(new NoteFirebase(duration, midiNote, velocities[midiNote], start));
+             }
+             seenDebut[midiNote] = false;
+             break;
+         }
+       }
+     }
+     GlobalVars.getInstance().songStorage.notes = new NoteFirebase[notes.size()];
+     GlobalVars.getInstance().songStorage.notes = notes.toArray(new NoteFirebase[0]);
+     GlobalVars.getInstance().songStorage.save(GlobalVars.getInstance().songFirestore.objectID);
+     activity.deinitSequencer();
+  }
 
    void preparerLibGdxSubView(){
      int guideLineID = View.generateViewId();
@@ -448,33 +546,15 @@ public class PlayerFragment extends Fragment
    return false;
  }
 
- @Override
- public void onCallback(SongStorage songStorage) {
-    int i;
-    for (i=0; i < songStorage.scale.length; i++){
-      if (songStorage.scale[i]){
-        Log.d("scale :", String.valueOf(i));
-      }
-    }
-   this.songStorage = songStorage;
- }
-
  public void actionBackButton(){
-//   GlobalVars.getInstance().songFirestore.set(
-//           180, // pas bonne duree
-//           System.currentTimeMillis()/1000,
-//           GlobalVars.getInstance().meFirestore.name,
-//           holder.thumbnail.toString(),
-//           singleVideo.getId(),
-//           "",
-//           GlobalVars.getInstance().meFirestore.objectID,
-//           singleVideo.getTitle(),
-//           newId);
-//        GlobalVars.getInstance().songFirestore.save();
+//   activity.youtubeController.youTubePlayer.pause();
+   // will trigger activity.sequencer.stop();
+   // which in turn will trigger refreshPlayingTrack
+   // which will put the good notes inside playingTrack
 
-//        GlobalVars.getInstance().songStorage = ...
-//        GlobalVars.getInstance().songStorage.save();
+   // wait a bit because this
    Navigation.findNavController(getView()).popBackStack();
+   // --> will trigger onStop, which will trigger saving the notes to firebase storage.
  }
 
 

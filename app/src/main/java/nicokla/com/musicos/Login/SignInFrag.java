@@ -142,5 +142,6 @@ public class SignInFrag extends Fragment implements UserFirestore.MyCallback {
   @Override
   public void onCallback(UserFirestore userFirestore) {
     GlobalVars.getInstance().meFirestore = userFirestore;
+    Log.i("username:", userFirestore.name);
   }
 }

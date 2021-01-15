@@ -37,7 +37,64 @@ public class SongStorage {
   public ChordFirebase[] notesAccompagnement;
   public int showChords;
 
-  public SongStorage() {}
+  public SongStorage() {
+    scale = new boolean[]{true,true,true,true,
+                          true,true,true,true,
+                          true,true,true,true};
+    chordNames = new String[]{
+            "+","","-","","-","+","","+","","-","","dim",
+            "Δ","","m7","","m7","Δ","","7","","m7","","ø",
+            "Δ","","m7","","m7","Δ","","7","","m7","","ø"
+    };
+    chordNotes = new int[36][];
+    chordNotes[0] = new int[]{0,4,7};
+    chordNotes[1] = new int[]{};
+    chordNotes[2] = new int[]{2,5,9};
+    chordNotes[3] = new int[]{};
+    chordNotes[4] = new int[]{4,7,11};
+    chordNotes[5] = new int[]{5,9,12};
+    chordNotes[6] = new int[]{};
+    chordNotes[7] = new int[]{7,11,14};
+    chordNotes[8] = new int[]{};
+    chordNotes[9] = new int[]{9,12,16};
+    chordNotes[10] = new int[]{};
+    chordNotes[11] = new int[]{11,14,17};
+    chordNotes[12] = new int[]{0,4,7,11};
+    chordNotes[13] = new int[]{};
+    chordNotes[14] = new int[]{5,12,9,2};
+    chordNotes[15] = new int[]{};
+    chordNotes[16] = new int[]{7,4,11,14};
+    chordNotes[17] = new int[]{12,5,16,9};
+    chordNotes[18] = new int[]{};
+    chordNotes[19] = new int[]{17,7,11,14};
+    chordNotes[20] = new int[]{};
+    chordNotes[21] = new int[]{19,16,9,12};
+    chordNotes[22] = new int[]{};
+    chordNotes[23] = new int[]{14,21,17,11};
+    chordNotes[24] = new int[]{0,4,7,11};
+    chordNotes[25] = new int[]{};
+    chordNotes[26] = new int[]{5,12,9,2};
+    chordNotes[27] = new int[]{};
+    chordNotes[28] = new int[]{7,4,11,14};
+    chordNotes[29] = new int[]{12,5,16,9};
+    chordNotes[30] = new int[]{};
+    chordNotes[31] = new int[]{17,7,11,14};
+    chordNotes[32] = new int[]{};
+    chordNotes[33] = new int[]{19,16,9,12};
+    chordNotes[34] = new int[]{};
+    chordNotes[35] = new int[]{14,21,17,11};
+    instru2_n = 0;
+    volumeRecording = 90;
+    rootNote = 48;
+    instru1_n = 0;
+    noteNames = 0;
+    volumeYoutube = (float) 0.9;
+    notes = new NoteFirebase[]{};
+    chordRoots = new boolean[]{true,false,true,false,true,true,false,true,false,true,false,true};
+    volumePlayer = 100;
+    notesAccompagnement = new ChordFirebase[]{};
+    showChords = 0;
+  }
 
   public static void load(String id, MyCallback myCallback){
     Log.d("get", id);

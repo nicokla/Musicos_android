@@ -1,6 +1,6 @@
 package nicokla.com.musicos.Firebase;
 
-class ChordFirebase{
+public class ChordFirebase{
   public float duration;
   public int[] notesAbsolute;
   public int ligne;

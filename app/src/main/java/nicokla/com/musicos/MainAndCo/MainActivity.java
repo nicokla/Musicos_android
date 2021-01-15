@@ -69,13 +69,20 @@ public class MainActivity extends AppCompatActivity {
         rcvr.send(myMsg, 0);
     }
 
+    public void initSequencer(){
+        sequencer = new SequencerImpl(60, GlobalVars.getInstance().midiPlayer);
+        rcvr = sequencer.sequencerThread.midiEventRecordingReceiver;
+    }
+
+    public void deinitSequencer(){
+        sequencer.close();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sequencer = new SequencerImpl(60, GlobalVars.getInstance().midiPlayer);
-        rcvr = sequencer.sequencerThread.midiEventRecordingReceiver;
 
 //        Realm realm = Realm.getDefaultInstance();
 //        parent = realm.where(Parent.class).findFirst();

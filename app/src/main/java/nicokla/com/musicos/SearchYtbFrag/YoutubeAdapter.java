@@ -1,6 +1,7 @@
 package nicokla.com.musicos.SearchYtbFrag;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 //import io.realm.Realm;
 //import nicokla.com.musicos.Realm.DataHelper;
+import nicokla.com.musicos.Firebase.SongStorage;
 import nicokla.com.musicos.MainAndCo.GlobalVars;
 import nicokla.com.musicos.R;
 
@@ -38,6 +40,7 @@ public class YoutubeAdapter extends RecyclerView.Adapter<YoutubeAdapter.MyViewHo
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         public ImageView thumbnail;
+        public String thumbnailURL;
         public TextView video_title, video_id, video_description;
         public RelativeLayout video_view;
 
@@ -107,6 +110,7 @@ public class YoutubeAdapter extends RecyclerView.Adapter<YoutubeAdapter.MyViewHo
                 .resize(480,270)
                 .centerCrop()
                 .into(holder.thumbnail);
+        holder.thumbnailURL = singleVideo.getThumbnailURL();
 
         //setting on click listener for each video_item to launch clicked video in new activity
         holder.video_view.setOnClickListener(new View.OnClickListener() {
@@ -124,23 +128,23 @@ public class YoutubeAdapter extends RecyclerView.Adapter<YoutubeAdapter.MyViewHo
 //                );
 
                 // CRUD : Create
-
-                // TODO : Create song with video in firebase.
                 String newId = UUID.randomUUID().toString();
+                Log.d("newId", newId);
                 GlobalVars.getInstance().songFirestore.set(
-                        180, // pas bonne duree
+                        180, // TODO : get ytb video vrai duree
+                        // ---> https://developers.google.com/youtube/v3/docs/videos
                         System.currentTimeMillis()/1000,
                         GlobalVars.getInstance().meFirestore.name,
-                        holder.thumbnail.toString(),
+                        holder.thumbnailURL,
                         singleVideo.getId(),
                         "",
                         GlobalVars.getInstance().meFirestore.objectID,
                         singleVideo.getTitle(),
                         newId);
-//        GlobalVars.getInstance().songFirestore.save();
+                GlobalVars.getInstance().songFirestore.save();
 
-//        GlobalVars.getInstance().songStorage = ...
-//        GlobalVars.getInstance().songStorage.save();
+                GlobalVars.getInstance().songStorage = new SongStorage();
+                GlobalVars.getInstance().songStorage.save(newId);
 
                 Navigation.findNavController(view).navigate(
                         SearchYtbFragmentDirections.Companion.confirmVideo(singleVideo.getId(), newId)
