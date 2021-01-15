@@ -151,15 +151,15 @@ public class SequencerImpl implements Sequencer {
                     }finally{
                         mutex2.unlock();
                     }
-                    Utils.print("aaaaa\n");
+//                    Utils.print("aaaaa\n");
                 } else {
                     // stopped
                     answer = (long) (tickPosition); // + ((runningStoppedTime - tickPositionSetTime) * 1000.0f * getTicksPerMicrosecond()));
-                    Utils.print("aeiouy\n");
+//                    Utils.print("aeiouy\n");
                 }
             } finally {
                 mutex.unlock();
-                Utils.print(answer);
+//                Utils.print(answer);
                 return answer;
             }
         }

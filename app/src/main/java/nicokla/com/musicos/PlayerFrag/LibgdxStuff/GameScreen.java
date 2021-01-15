@@ -64,8 +64,8 @@ public class GameScreen implements Screen {
         hauteurReelle = (float) Gdx.graphics.getHeight();
     }
 
-    public void addTile(int column, int line, int isDiese) {
-        final Tile tile = generateTile(column, line, isDiese);
+    public void addTileAtTime(int column, int line, int isDiese, long time) {
+        final Tile tile = generateTileAtTime(column, line, isDiese, time);
 //        tiles.add(tile);
         tile.addListener(new InputListener() {
             @Override
@@ -82,13 +82,17 @@ public class GameScreen implements Screen {
         stage.addActor(tile);
     }
 
+    public void addTile(int column, int line, int isDiese) {
+        addTileAtTime(column, line, isDiese, mainActivity.sequencer.getMicrosecondPosition()/1000);
+    }
+
     public float getCoordinateFromTime(long time){
         float time2 = (float) time;
         return ((time2 / 3000 * hauteurReelle)); // - 130f
     }
 
-    public Tile generateTile(int column, int line, int isDiese) {
-        Tile tile = new Tile(column, accu);
+    public Tile generateTileAtTime(int column, int line, int isDiese, long time) {
+        Tile tile = new Tile(column, getCoordinateFromTime(time));
 //        int col = tile.getColumn();
         tile.setColor(GlobalVars.getInstance().colors[line][isDiese]);
         tile.setSound(60);
@@ -96,15 +100,15 @@ public class GameScreen implements Screen {
         return tile;
     }
 
+    public Tile generateTile(int column, int line, int isDiese) {
+        return generateTileAtTime(column, line, isDiese, mainActivity.sequencer.getMicrosecondPosition()/1000);
+    }
+
     public void update() {
         Gdx.input.setInputProcessor(stage);
         stage.act();
-//        if(mainActivity.midiSequencer.isPlaying()) {
-//        if (mainActivity.midiSequencer.isPlaying){
+        // We update accu in order for the camera to move
         accu = getCoordinateFromTime(mainActivity.sequencer.getMicrosecondPosition()/1000);
-            //getCoordinateFromTime(mainActivity.midiSequencer.getTimeRel())
-//            accu++;
-//        }
     }
 
     @Override
@@ -115,30 +119,22 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        //viewport.update(700, 400, false);
         camera.position.y = accu - 200; // 165
-        camera.update();
+        camera.update(); // the camera is moving at its new y position
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        delta = Math.min(delta, 0.03f);
 
         Gdx.input.setInputProcessor(stage);
         stage.draw();
         stage.act();
 
-//        batch.begin();
-//        batch.draw(background, 0, 0, PianoTiles.WORLD_WIDTH, PianoTiles.WORLD_HEIGHT);
-//        batch.end();
-
-        this.update();
+        this.update(); // we update accu with the time (the y position)
         stage.draw();
         for (Actor tile : stage.getActors()) {
             Tile tile2 = (Tile) tile;
             tile2.render(batch);
         }
-//        batch.begin();
-//        batch.end();
     }
 
     @Override

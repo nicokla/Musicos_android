@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -70,8 +71,27 @@ public class PlayerFragment extends Fragment
   ConstraintSet set;
   GameFragment libgdxFragment;
   View myView;
+   String songId;
+   Handler mHandler = new Handler();
+   Runnable mStatusChecker = new Runnable() {
+     @Override
+     public void run() {
+       try {
+         updateSeekBar();
+       } finally {
+         mHandler.postDelayed(mStatusChecker, 1000);
+       }
+     }
+   };
+   void startRepeatingTask() {
+     mStatusChecker.run();
+   }
 
-  Hashtable<Integer, Integer> idToLine; // num
+   void stopRepeatingTask() {
+     mHandler.removeCallbacks(mStatusChecker);
+   }
+
+   Hashtable<Integer, Integer> idToLine; // num
   Hashtable<Integer, Integer> idToDouze; // num
   Hashtable<Integer, Integer> idToColumn;
   Hashtable<Integer, Integer> idToIsDiese;
@@ -119,6 +139,9 @@ public class PlayerFragment extends Fragment
 //    super.onDestroyView();
 //  }
 
+   void updateSeekBar(){
+       mBinding.videoTime.setProgress((int)(activity.sequencer.getMicrosecondPosition()/1000000));
+   }
 
    @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -131,22 +154,18 @@ public class PlayerFragment extends Fragment
     idToTrenteSix=new Hashtable<Integer, Integer>();
     activity = (MainActivity)getActivity();
 
-    activity.initSequencer();;
+    activity.initSequencer();
 
     Point size = new Point();
     activity.getWindowManager().getDefaultDisplay().getSize(size);
-    int screenWidth = size.x;
-    int screenHeight = size.y;
 
     // Inflate the layout for this fragment
      mBinding = FragmentPlayerBinding.inflate(getLayoutInflater());
      myView = mBinding.getRoot();
 //     myView =  inflater.inflate(R.layout.fragment_player, container, false);
      vidId = PlayerFragmentArgs.fromBundle(getArguments()).getVideoId();
-    String songId = PlayerFragmentArgs.fromBundle(getArguments()).getSongId();
+     songId = PlayerFragmentArgs.fromBundle(getArguments()).getSongId();
     GlobalVars.getInstance().songFirestore.objectID = songId;
-
-    SongStorage.load(songId, this);
 
     youTubePlayerView = myView.findViewById(R.id.youtube_player_view);
     myConstraintLayout = myView.findViewById(R.id.root);
@@ -217,6 +236,9 @@ public class PlayerFragment extends Fragment
        }
      } );
 
+     if (GlobalVars.getInstance().songFirestore.videoID == "") {
+       startRepeatingTask();
+     }
 
      return myView;
   }
@@ -232,13 +254,30 @@ public class PlayerFragment extends Fragment
      createGuideLines();
      remplirLignes(tableau);
      preparerLibGdxSubView();
+     SongStorage.load(songId, this);
 
    }
 
 
-   @Override
-   public void onCallback(SongStorage songStorage) {
-     GlobalVars.getInstance().songStorage = songStorage;
+   void populateCanvas(){
+    SongStorage songStorage = GlobalVars.getInstance().songStorage;
+     int i;
+     int midiNote;
+
+     for (i=0; i < songStorage.notes.length; i++) {
+       NoteFirebase note = songStorage.notes[i];
+       midiNote = note.midiNote;
+      libgdxFragment.pianoTiles.gameScreen.addTileAtTime(
+          GlobalVars.getInstance().positions[(midiNote - 48) % 12],
+         (midiNote - 48) / 12,
+          GlobalVars.getInstance().isDieseInts[(midiNote - 48) % 12],
+              (long)note.start);
+     }
+   }
+
+
+   void populateMidi(){
+     SongStorage songStorage = GlobalVars.getInstance().songStorage;
      int i;
      float start, end;
      int velocity, midiNote;
@@ -251,7 +290,7 @@ public class PlayerFragment extends Fragment
        midiNote = note.midiNote;
        velocity = note.velocity;
 
-        ShortMessage message = new ShortMessage();
+       ShortMessage message = new ShortMessage();
        try {
          message.setMessage(ShortMessage.NOTE_ON, 0, midiNote, velocity);
        } catch (InvalidMidiDataException e) {
@@ -275,10 +314,23 @@ public class PlayerFragment extends Fragment
    }
 
    @Override
+   public void onCallback(SongStorage songStorage) {
+     GlobalVars.getInstance().songStorage = songStorage;
+     populateMidi();
+     populateCanvas();
+   }
+
+   @Override
    public void onStop() {
      super.onStop();
-     Track track = activity.sequencer.sequencerThread.playingTrack;
+     if (GlobalVars.getInstance().songFirestore.videoID == "") {
+       stopRepeatingTask();
+     }
      activity.sequencer.sequencerThread.refreshPlayingTrack();
+     Track track = activity.sequencer.sequencerThread.playingTrack;
+     if(track == null){
+       return;
+     }
      float duration, start;
      int midiNote, velocity;
      float[] debuts = new float[150]; // index is midi pitch
@@ -316,6 +368,8 @@ public class PlayerFragment extends Fragment
      GlobalVars.getInstance().songStorage.notes = new NoteFirebase[notes.size()];
      GlobalVars.getInstance().songStorage.notes = notes.toArray(new NoteFirebase[0]);
      GlobalVars.getInstance().songStorage.save(GlobalVars.getInstance().songFirestore.objectID);
+     GlobalVars.getInstance().songFirestore.save(); // to fix duration, actually only useful first time
+     // is only useful for ios because ios version uses this number for slider max time.
      activity.deinitSequencer();
   }
 
@@ -410,17 +464,16 @@ public class PlayerFragment extends Fragment
     Boolean [] isNotDiese = new Boolean[]
         {true, false, true, false, true,
          true, false, true, false, true, false, true};
-     int [] isDieseInt = new int[]
-             {0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0};
 
 //     ConstraintLayout mConstraintLayout = activity.findViewById(R.id.root);
-     int i = 0, j = 0, column = 0;
+     int i = 0, j = 0, column = 0, isDieseInt = 0;
 
      int myId;
      for (i = 0; i < 3; i++) {
       for (j = 0; j < 12; j++) {
         if (tableau[j]) {
           column = GlobalVars.getInstance().positions[j];
+          isDieseInt = GlobalVars.getInstance().isDieseInts[j];
           Button button = new Button(this.activity);
           myId = View.generateViewId();
           button.setId(myId);
@@ -472,7 +525,7 @@ public class PlayerFragment extends Fragment
           idToDouze.put(button.getId(), j);
           idToTrenteSix.put(button.getId(), i * 12 + j);
           idToColumn.put(button.getId(), column);
-          idToIsDiese.put(button.getId(), isDieseInt[j]);
+          idToIsDiese.put(button.getId(), isDieseInt);
         }
       }
     }
@@ -496,9 +549,9 @@ public class PlayerFragment extends Fragment
          GlobalVars.getInstance().midiPlayer.jouerNote(tag, 80);
          activity.sendNoteOn(tag,80);
          libgdxFragment.pianoTiles.gameScreen.addTile(
-                 idToColumn.get(id),
-                 idToLine.get(id),
-                 idToIsDiese.get(id));
+                 idToColumn.get(id), // GlobalVars.getInstance().positions[(tag - 48) % 12]
+                 idToLine.get(id), // (tag - 48) / 12
+                 idToIsDiese.get(id)); // GlobalVars.getInstance().isDieseInts[(tag - 48) % 12]
          v.performClick();
          break;
        case MotionEvent.ACTION_UP:

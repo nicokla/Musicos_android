@@ -13,6 +13,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
+import nicokla.com.musicos.MainAndCo.GlobalVars;
 import nicokla.com.musicos.MainAndCo.MainActivity;
 import nicokla.com.musicos.PlayerFrag.MidiStuff.MidiSequencer;
 import nicokla.com.musicos.R;
@@ -45,23 +46,29 @@ public class YoutubeController extends AbstractYouTubePlayerListener {
     seekBar = playerUi.findViewById(R.id.video_time);
 
     playPauseButton.setOnClickListener( (view) -> {
-      if(playerTracker.getState() == PlayerConstants.PlayerState.PLAYING) {
-        youTubePlayer.pause();
-//        mainActivity.midiSequencer.pause();
-////        mainActivity.gameScreen.defile = false;
-//        playPauseButton.setImageResource(R.drawable.ic_play_arrow_black_48dp);
-      }else {
-        youTubePlayer.play();
-//        mainActivity.midiSequencer.play();
-////        mainActivity.gameScreen.defile = true;
-//        playPauseButton.setImageResource(R.drawable.ic_pause_black_48dp);
+      if (GlobalVars.getInstance().songFirestore.videoID != ""){ // si avec video
+        if (playerTracker.getState() == PlayerConstants.PlayerState.PLAYING) {
+          youTubePlayer.pause();
+        } else {
+          youTubePlayer.play();
+        }
+      } else{ // si sans video
+        if( mainActivity.sequencer.isRecording() ){
+          mainActivity.sequencer.stop();
+          playPauseButton.setImageResource(R.drawable.ic_play_arrow_black_48dp);
+        } else {
+          mainActivity.sequencer.startRecording();
+          playPauseButton.setImageResource(R.drawable.ic_pause_black_48dp);
+        }
       }
     });
 
     seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
       @Override
       public void onStopTrackingTouch(SeekBar seekBar) {
-        youTubePlayer.pause();
+        if (GlobalVars.getInstance().songFirestore.videoID != ""){
+          youTubePlayer.pause();
+        }
 //        mainActivity.sequencer.stop();
       }
       @Override
@@ -70,14 +77,15 @@ public class YoutubeController extends AbstractYouTubePlayerListener {
       }
       @Override
       public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
-        if(fromUser) {
-          youTubePlayer.seekTo((float) progress);
-//          mainActivity.midiSequencer.setTime(((long) progress) * 1000);
-          mainActivity.sequencer.setMicrosecondPosition(((long) progress) * 1000000);
-          //if()
-//          mainActivity.gameScreen.accu =
-//          accu - 130;
-//          camera.update();
+        if (GlobalVars.getInstance().songFirestore.videoID != ""){
+          if(fromUser) {
+            youTubePlayer.seekTo((float) progress);
+            mainActivity.sequencer.setMicrosecondPosition(((long) progress) * 1000000);
+          }
+        } else {
+          if (fromUser){
+            mainActivity.sequencer.setMicrosecondPosition(((long) progress) * 1000000);
+          }
         }
       }
     });
@@ -137,6 +145,7 @@ public class YoutubeController extends AbstractYouTubePlayerListener {
     super.onVideoDuration(youTubePlayer, duration);
     this.duration = duration;
     seekBar.setMax((int)duration);
+    GlobalVars.getInstance().songFirestore.duration = duration;
   }
 
   @Override

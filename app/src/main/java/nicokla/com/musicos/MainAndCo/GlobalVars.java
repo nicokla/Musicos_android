@@ -27,6 +27,9 @@ public class GlobalVars {
                   "Vb", "V", "VIb", "VI", "VIIb", "VII"};
   public Integer [] positions = new Integer[]
           {0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6};
+  public int [] isDieseInts = new int[]
+          {0, 1, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0};
+
   public Color[][] colors = {
           {new Color(1.0f, 147f/255f, 147f/255f, 1f),
                   new Color(181f/255f, 0f, 0f, 1f)},
