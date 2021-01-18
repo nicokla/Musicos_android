@@ -43,7 +43,7 @@ public class YoutubeController extends AbstractYouTubePlayerListener {
     seekBar = playerUi.findViewById(R.id.video_time);
 
     playPauseButton.setOnClickListener( (view) -> {
-      if (GlobalVars.getInstance().songFirestore.videoID != ""){ // si avec video
+      if (!GlobalVars.getInstance().songFirestore.videoID.equals("")){ // si avec video
         if (playerTracker.getState() == PlayerConstants.PlayerState.PLAYING) {
           youTubePlayer.pause();
         } else {
@@ -63,7 +63,7 @@ public class YoutubeController extends AbstractYouTubePlayerListener {
     seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
       @Override
       public void onStopTrackingTouch(SeekBar seekBar) {
-        if (GlobalVars.getInstance().songFirestore.videoID != ""){
+        if (!GlobalVars.getInstance().songFirestore.videoID.equals("")){
           youTubePlayer.pause();
         }
 //        mainActivity.sequencer.stop();
@@ -74,7 +74,7 @@ public class YoutubeController extends AbstractYouTubePlayerListener {
       }
       @Override
       public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
-        if (GlobalVars.getInstance().songFirestore.videoID != ""){
+        if (!GlobalVars.getInstance().songFirestore.videoID.equals("")){
           if(fromUser) {
             youTubePlayer.seekTo((float) progress);
             mainActivity.sequencer.setMicrosecondPosition(((long) progress) * 1000000);

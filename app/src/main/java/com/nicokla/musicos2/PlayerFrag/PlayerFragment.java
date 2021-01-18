@@ -172,26 +172,6 @@ public class PlayerFragment extends Fragment
 
      mBinding.buttonBack.setOnTouchListener(this);
 
-    //playNextVideoButton = view.findViewById(R.id.next_video_button);
-    //initYouTubePlayerView();
-    getLifecycle().addObserver(youTubePlayerView);
-
-    //1
-    youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
-      @Override
-      public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-        activity.youtubeController = new YoutubeController(activity, myView, youTubePlayer, youTubePlayerView);
-        youTubePlayer.addListener(activity.youtubeController);
-
-        YouTubePlayerUtils.loadOrCueVideo(
-                youTubePlayer, getLifecycle(),
-                vidId,0f
-        );
-        youTubePlayer.pause();
-        activity.youtubeController.playPauseButton.setImageResource(R.drawable.ic_play_arrow_black_48dp);
-      }
-    });
-
      GlobalVars.getInstance().songFirestore.checkIfLiked(this);
 
      SongFirestore.CallbackContainerLiked callbackContainer = this;
@@ -233,10 +213,31 @@ public class PlayerFragment extends Fragment
        }
      } );
 
-     if (GlobalVars.getInstance().songFirestore.videoID == "") {
+     boolean isWithVideo = ! GlobalVars.getInstance().songFirestore.videoID.equals("");
+
+     if ( ! isWithVideo ) {
        startRepeatingTask();
        mBinding.youtubePlayerView.setVisibility(View.INVISIBLE);
      }
+
+     mBinding.playPause.setImageResource(R.drawable.ic_play_arrow_black_48dp);
+     getLifecycle().addObserver(youTubePlayerView);
+     youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+       @Override
+       public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+         activity.youtubeController = new YoutubeController(activity, myView, youTubePlayer, youTubePlayerView);
+         youTubePlayer.addListener(activity.youtubeController);
+
+         if (isWithVideo){
+           YouTubePlayerUtils.loadOrCueVideo(
+                   youTubePlayer, getLifecycle(),
+                   vidId,0f
+           );
+           youTubePlayer.pause();
+         }
+       }
+     });
+
 
      return myView;
   }
@@ -300,7 +301,7 @@ public class PlayerFragment extends Fragment
    @Override
    public void onStop() {
      super.onStop();
-     if (GlobalVars.getInstance().songFirestore.videoID == "") {
+     if (GlobalVars.getInstance().songFirestore.videoID.equals("")) {
        stopRepeatingTask();
      }
      activity.sequencer.sequencerThread.refreshPlayingTrack();
